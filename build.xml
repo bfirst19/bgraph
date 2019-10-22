@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="HW.makejar" default="deploy" basedir=".">
+  <target name ="deploy" description="Create a jar for the HW project">
+  	<copy todir="/home/sel/bgraph" >  
+  	  <fileset dir="/home/sel/eclipse-workspace/bgraph" includes="bgraph/**"/>
+  	</copy>
+  </target>
+</project>

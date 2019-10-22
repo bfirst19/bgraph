@@ -4,7 +4,11 @@
 <head>
 <meta charset="utf-8">
 <title>Login</title>
-<link rel="stylesheet" href="../assets/style.css" />
+
+<!-- Custom styles for this template-->
+
+	<link href="../css/l-form.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/vendors/iconfonts/font-awesome/css/font-awesome.css"/>
 </head>
 <body>
 <?php
@@ -29,13 +33,23 @@ and password='".md5($password)."'";
 	}
     }else{
 ?>
-	<form class="login" action="" method="post" name="login">
-    <h1 class="login-title">Login</h1>
-    <input type="text" class="login-input" name="username" placeholder="Username" autofocus>
-    <input type="password" class="login-input" name="password" placeholder="Password">
-    <input type="submit" value="Login" name="submit" class="login-button">
-  <p class="login-lost">New Here? <a href="registration.php">Register</a></p>
-  </form>
+
+	<form class="login-form" action="" method="post" name="login">
+  <p class="login-text">
+    <span class="fa-stack fa-lg">
+      <i class="fa fa-circle fa-stack-2x"></i>
+      <i class="fa fa-lock fa-stack-1x"></i>
+    </span>
+  </p>
+  
+		<input type="text" class="login-username" name="username" placeholder="Username" autofocus>
+    <input type="password" class="login-password" name="password" placeholder="Password">
+    <input type="submit" value="Login" name="submit" class="login-submit">
+		
+</form>
+<a href="#" class="login-forgot-pass">forgot password?</a>
+<div class="underlay-photo"></div>
+<div class="underlay-black"></div> 
 
 <?php } ?>
 </body>
