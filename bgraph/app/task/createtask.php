@@ -1,54 +1,45 @@
-<?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-/*
-Tested working with PHP5.4 and above (including PHP 7 )
+<?php 
+include '../doc/header.php';
+?>
 
- */
+  <form role="form" method="post" id="task_createform">        
+        <div class="form-group">
+            <label for="taskname">
+                Task Name:</label>
+            <input type="text" class="form-control"
+            id="taskname" name="taskname"   required maxlength="50">
 
-require_once '../config/db.php';
+        </div>
+        <div class="form-group">
+            <label for="task_desc">
+                Task Description:</label>
+            <input type="text" class="form-control"
+            id="task_desc" name="task_desc" required maxlength="50">
+        </div>
+        <div class="form-group">
+            <label for="scheduled_date">
+                Scheduled Date:</label>
+            <input class="form-control" type="date" name="scheduled_date" id="scheduled_date" 
+            maxlength="6000" rows="7"></textarea>
+        </div>
+         <div class="form-group">
+            <label for="location">
+                Location:</label>  
+  <select class="form-control" id="location">
+    <option selected>Choose...</option>
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+  </select>
+        </div>
 
+        
+  <input type="submit" name="submitRegister" value="Submit" class="btn btn-success mr-2">                     
+                      <input type="button" class="btn btn-outline-dark" VALUE="Cancel"
+        onclick="window.location.href='../doc/dashboard'"> 
+                    </form>
+    </form>
+<?php 
+include '../doc/footer.php';
+?>
 
-
-if (isset($_REQUEST['taskname'])){
-	$taskname = stripslashes($_REQUEST['taskname']);
-	$taskname = mysqli_real_escape_string($con,$taskname); 
-	$task_desc = stripslashes($_REQUEST['task_desc']);
-	$task_desc = mysqli_real_escape_string($con,$task_desc);
-	$location = stripslashes($_REQUEST['location']);
-	$location = mysqli_real_escape_string($con,$location);
-  $create_date = date("Y-m-d H:i:s");
-  $scheduled_date = date("Y-m-d H:i:s");
-  /*
-  INSERT INTO `tasks` (`id`, `name`, `title`, `description`, `location`, `status`, `completed_by`, 
-  `assigned_to`, `scheduled_date`, `user_id`) VALUES (NULL, '', '', '', '', '', '', '', CURRENT_TIMESTAMP, '')*/
-/*
-  INSERT INTO `users` (`id`, `username`, `email`, `password`, `create_date`, `user_type`, `first_name`, `last_name`, `is_active`) VALUES (NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL)
-*/
-        $query = "INSERT into `tasks` (name,title,description,location,scheduled_date)
-VALUES ('$taskname', 'test title','$task_desc', '$location', '$scheduled_date')";
-        $result = mysqli_query($con,$query);
-        if(!$result){
-        		  
-      echo"Error description: " . mysqli_error($con);		
-        }else{
-echo"Created Task ..";
-        }
-}
-/*use FormGuide\Handlx\FormHandler;
-
-
-$pp = new FormHandler();
-
-$validator = $pp->getValidator();
-$validator->fields(['name','email'])->areRequired()->maxLength(50);
-$validator->field('email')->isEmail();
-$validator->field('message')->maxLength(6000);
-
-
-
-
-$pp->sendEmailTo('someone@gmail.com'); // ← Your email here
-
-echo $pp->process($_POST);*/
