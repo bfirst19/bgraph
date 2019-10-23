@@ -8,7 +8,6 @@
 <!-- Custom styles for this template-->
 
 	<link href="../css/l-form.css" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/vendors/iconfonts/font-awesome/css/font-awesome.css"/>
 </head>
 <body>
 <?php
@@ -27,29 +26,21 @@ and password='".md5($password)."'";
 	    $_SESSION['username'] = $username;
 	    header("Location: ../doc/dashboard.php");
          }else{
-	echo "<div class='form'>
+	echo "<div class='login'>
 <h3>Username/password is incorrect.</h3>
-<br/>Click here to <a href='login.php'>Login</a></div>";
+<br/><h3>Click here to <a href='login.php'>Login</a></div></h3>";
 	}
     }else{
 ?>
 
-	<form class="login-form" action="" method="post" name="login">
-  <p class="login-text">
-    <span class="fa-stack fa-lg">
-      <i class="fa fa-circle fa-stack-2x"></i>
-      <i class="fa fa-lock fa-stack-1x"></i>
-    </span>
-  </p>
+	<form class="login" action="" method="post" name="login">
   
-		<input type="text" class="login-username" name="username" placeholder="Username" autofocus>
-    <input type="password" class="login-password" name="password" placeholder="Password">
-    <input type="submit" value="Login" name="submit" class="login-submit">
-		
+  
+		<input type="text"  name="username" placeholder="Username" autofocus>
+    <input type="password"  name="password" placeholder="Password">
+    <input type="submit" value="Login" name="submit" >
+		<a href="#" >Forgot password?</a>
 </form>
-<a href="#" class="login-forgot-pass">forgot password?</a>
-<div class="underlay-photo"></div>
-<div class="underlay-black"></div> 
 
 <?php } ?>
 </body>

@@ -1,7 +1,5 @@
-
 <?php
 session_start();
-
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +43,7 @@ session_start();
  
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-	<a class="navbar-brand mr-1" href="../index">BlueGraph</a>
+	<a class="navbar-brand mr-1" href="../doc/dashboard">Bluegraph</a>
 	
 
 	   <button class="btn btn-link btn-sm text-dark order-1 order-sm-0" id="sidebarToggle" href="#">
@@ -56,7 +54,7 @@ session_start();
       <div class="input-group">
 <h5>	
 
-  Welcome My atsks <?php
+  Welcome  <?php
   echo $_SESSION['username'];	
 	?>
 </h5>
@@ -116,13 +114,15 @@ session_start();
                 <div class="dropdown-header text-center">
                   <img class="img-md rounded-circle" src="../assets/images/faces/man.jpg" alt="Profile image">
                   <p class="mb-1 mt-3 font-weight-semibold"><?php echo $_SESSION['username']; ?></p>
-                  <p class="font-weight-light text-muted mb-0">user1@bgraph.com</p>
+                  <p class="font-weight-light text-muted mb-0">sample@gmail.com</p>
                 </div>
                <!-- <a class="dropdown-item">My Profile <span class="badge badge-pill badge-danger">1</span><i class="dropdown-item-icon ti-dashboard"></i></a>
                 <a class="dropdown-item">Messages<i class="dropdown-item-icon ti-comment-alt"></i></a>
                 <a class="dropdown-item">Activity<i class="dropdown-item-icon ti-location-arrow"></i></a>
                 <a class="dropdown-item">FAQ<i class="dropdown-item-icon ti-help-alt"></i></a> -->
-                <a class="dropdown-item" href="../user/logout">Sign Out<i class="dropdown-item-icon ti-power-off"></i></a>
+                <!--a class="dropdown-item" href="../user/logout">Sign Out<i class="dropdown-item-icon ti-power-off"></i></a-->
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#settingsModal">Settings<i class="dropdown-item-icon ti-power-off"></i></a>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Sign out<i class="dropdown-item-icon ti-power-off"></i></a>
               </div>
             </li>
 </ul>
@@ -136,7 +136,7 @@ session_start();
 
 	   <ul class="sidebar navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="../index">
+        <a class="nav-link" href="../doc/dashboard.php">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
@@ -149,13 +149,13 @@ session_start();
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <h6 class="dropdown-header">User Management:</h6>
           <a class="dropdown-item" href="../user/registration.php">Create user</a>
-          <a class="dropdown-item" href="../user/edituser.php">Modify user</a>
+          <a class="dropdown-item" href="../user/edituser.php">Modify user access</a>
           <a class="dropdown-item" href="../task/mytasks.php">Assigned tasks</a>
-          <!--div class="dropdown-divider"></div>
-          <h6 class="dropdown-header">Other Pages:</h6>
-          <a class="dropdown-item" href="404.html">404 Page</a>
-          <a class="dropdown-item" href="blank.html">Blank Page</a>
-        </div-->
+          <!--div class="dropdown-divider"></div-->
+          <!--h6 class="dropdown-header">Other Pages:</h6-->
+          <!--a class="dropdown-item" href="404.html">404 Page</a-->
+          <!--a class="dropdown-item" href="blank.html">Blank Page</a-->
+        </div>
       </li>
 
        <li class="nav-item dropdown">
@@ -166,11 +166,12 @@ session_start();
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <h6 class="dropdown-header">Task Management:</h6>
           <a class="dropdown-item" href="../task/mytasks.php">My tasks</a>
-          <a class="dropdown-item" href="../task/createtask.php">Create new task</a>
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#myModal">Create new task2<i class="dropdown-item-icon ti-power-off"></i></a>
+          <!--a href="#" onClick="MyWindow=window.open('../task/newTask.php','MyWindow','width=600,height=300'); return false;">Click Here</a-->                  
+         <a class="dropdown-item" href="../task/createtask.php">Create new task</a>
           <a class="dropdown-item" href="../task/uploadedtasks.php">Uploaded tasks</a>          
           <a class="dropdown-item" href="../task/completedtasks.php">Completed tasks</a>
-                  
-        </div-->
+        </div>
       </li>     
 	</ul>
 	
@@ -178,55 +179,3 @@ session_start();
 	<div id="content-wrapper">
 
       <div class="container-fluid">
-
-		</div>
-		</div>
-
-		 <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
-
-
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="../user/login">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-	</div>
-
-
-	<!-- Bootstrap core JavaScript-->
-  <script src="../assets/jquery/jquery.min.js"></script>
-  <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script src="../assets/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Page level plugin JavaScript-->
-  <script src="../assets/chart.js/Chart.min.js"></script>
-  <script src="../assets/datatables/jquery.dataTables.js"></script>
-  <script src="../assets/datatables/dataTables.bootstrap4.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="../js/bg-admin.min.js"></script>
-
-
-
-  </body>
-
-</html>

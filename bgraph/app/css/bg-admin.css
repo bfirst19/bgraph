@@ -3470,6 +3470,7 @@ input[type="button"].btn-block {
   white-space: nowrap;
   background-color: transparent;
   border: 0;
+  font-size:0.700rem;
 }
 
 .dropdown-item:hover, .dropdown-item:focus {
@@ -6229,6 +6230,7 @@ a.close.disabled {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.3rem;
   outline: 0;
+  font-size: 0.700rem;
 }
 
 .modal-backdrop {
