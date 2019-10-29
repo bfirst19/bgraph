@@ -1,5 +1,5 @@
 <?php
-include("./config/auth");
+include("config/auth");
 ?>
 <!DOCTYPE html>
 <html>
