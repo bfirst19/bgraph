@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 ?>
 
 <!DOCTYPE html>
@@ -76,7 +77,7 @@ session_start();
                 <div class="dropdown-header text-center">
                   <img class="img-md rounded-circle" src="../assets/images/faces/man.jpg" alt="Profile image">
                   <p class="mb-1 mt-3 font-weight-semibold"><?php echo $_SESSION['username']; ?></p>
-                  <p class="font-weight-light text-muted mb-0">sample@gmail.com</p>
+                  <p class="font-weight-light text-muted mb-0"><?php echo $_SESSION['email']; ?></p>
                 </div>
                <!-- <a class="dropdown-item">My Profile <span class="badge badge-pill badge-danger">1</span><i class="dropdown-item-icon ti-dashboard"></i></a>
                 <a class="dropdown-item">Messages<i class="dropdown-item-icon ti-comment-alt"></i></a>
@@ -104,18 +105,47 @@ session_start();
         </a>
       </li>
        <li class="nav-item">
+              <a class="nav-link" href="../task/mytasks">
+                <i class="fas fa-fw fa-check"></i>
+                <span class="menu-title">Task box</span>
+              </a>
+       </li>
+       <li class="nav-item">
               <a class="nav-link" href="../users/user_list">
                 <i class="fas fa-fw fa-users"></i>
                 <span class="menu-title">User Management</span>
               </a>
        </li>
+       
+       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-fw fa-tasks"></i>
+          <span>Project Management</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <h6 class="dropdown-header">Project Management:</h6>
+          <a class="dropdown-item" href="../prm/projects"><i class="fas fa-project-diagram"></i>Projects</a>          
+          <a class="dropdown-item" href="../prm/checklists"><i class="fas fa-clipboard-list"></i>Checklists</a>
+          <a class="dropdown-item" href="../prm/stations"><i class="fas fa-train"></i>Stations</a>
+          <!--div class="dropdown-divider"></div-->
+          <!--h6 class="dropdown-header">Other Pages:</h6-->
+          <!--a class="dropdown-item" href="404.html">404 Page</a-->
+          <!--a class="dropdown-item" href="blank.html">Blank Page</a-->
+        </div>
+      </li>
+       
        <li class="nav-item">
-              <a class="nav-link" href="../tasks/task_list">
-                <i class="fas fa-fw fa-tasks"></i>
-                <span class="menu-title">Task Management</span>
+              <a class="nav-link" href="../prm/roles">
+                <i class="fas fa-fw fa-user-tag"></i>
+                <span class="menu-title">Roles</span>
               </a>
        </li>
-        
+        <li class="nav-item">
+              <a class="nav-link" href="../prm/orgs">
+                <i class="fas fa-fw fa-sitemap"></i>
+                <span class="menu-title">Organizations</span>
+              </a>
+       </li>
 
        
 	</ul>

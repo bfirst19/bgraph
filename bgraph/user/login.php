@@ -23,8 +23,12 @@ and password='".md5($password)."'";
 	$result = mysqli_query($con,$query) or die(mysqli_error($con));
 	$rows = mysqli_num_rows($result);
         if($rows==1){
-			$_SESSION['username'] = $username;			
-	    header("Location: ../doc/dashboard.php");
+            while ($row = mysqli_fetch_array($result)) {
+                $_SESSION['email'] = $row['email'];
+            }
+        
+			$_SESSION['username'] = $username;				
+	           header("Location: ../doc/dashboard.php");
          }else{
 	echo "<div class='login'>
 <h3>Username/password is incorrect.</h3>

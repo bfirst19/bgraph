@@ -117,7 +117,8 @@
         
         <script src="../js/buttons/dataTables.fixedColumns.min.js"></script>
         <script src="../js/buttons/dataTables.select.min.js"></script>
-
+		
+		<script src="../js/sweetalert.min.js"></script>
 
 
   </body>
