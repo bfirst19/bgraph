@@ -11,8 +11,9 @@
 </head>
 <body>
 <?php
-require('../config/db.php');
 session_start();
+require('../config/db.php');
+
 if (isset($_POST['username'])){
 	$username = stripslashes($_REQUEST['username']);
 	$username = mysqli_real_escape_string($con,$username);
@@ -27,7 +28,8 @@ and password='".md5($password)."'";
                 $_SESSION['email'] = $row['email'];
             }
         
-			$_SESSION['username'] = $username;				
+			$_SESSION['username'] = $username;
+			$_SESSION['auth'] = "OKAY";
 	           header("Location: ../doc/dashboard.php");
          }else{
 	echo "<div class='login'>

@@ -7,7 +7,7 @@
    margin-left:10px;
 }
 </style>
-        
+        <div><h6 align="center">Organization List</h6></div>
 <table id="orgs_table_id" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
@@ -91,14 +91,14 @@ $(document).ready( function() {
 		  buttons: {
 			    buttons: [
 			      {
-			        text: "Create new Organization",
+			        text: "<i class='fas fa-sitemap'>New</i>",
 			        className:"btn btn-primary btn-xs dt-add",
 			        action: function(e, dt, node, config) {
 			        	$('#newOrgModal').modal('show');			        				        	 
 			        }
 			      },
 			      {
-				        text: "Delete Organization",
+				        text: "<i class='fas fa-minus-circle'>Delete</i>",
 				        className:"btn btn-primary btn-xs dt-edit",
 				        action: function(e, dt, node, config) {
 				        	var data=table.rows( { selected: true }).data();				        	

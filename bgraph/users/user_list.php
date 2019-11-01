@@ -7,6 +7,7 @@
    margin-left:10px;
 }
 </style>
+ <div><h6 align="center">Users List</h6></div>
  <table id="users_table_id" class="table table-striped table-bordered" style="width:100%" >
     <thead align="left">
         <tr>
@@ -207,6 +208,9 @@
 <script type="text/javascript">
 
 $(document).ready( function() {
+	// after table aply filter
+ 	//$('#users_table_id').excelTableFilter();
+ 	
 	 var table = $('#users_table_id').DataTable({		  
 		  "dom": '<"dt-buttons"lr><"clear">fBtip',
 		  "responsive": false,
@@ -218,7 +222,7 @@ $(document).ready( function() {
               type: 'post',  // method  , by default get
           },
           columnDefs: [ {
-              orderable: false,
+              orderable: true,
               className: 'select-checkbox',
               targets:   0
           } ],
@@ -230,14 +234,14 @@ $(document).ready( function() {
 		  buttons: {
 			    buttons: [
 			      {
-			        text: "Create new user",
+			        text: "<i class='fas fa-user'>New</i>",
 			        className:"btn btn-primary btn-xs dt-add",
 			        action: function(e, dt, node, config) {
 			        	$('#newUserModal').modal('show');			        				        	 
 			        }
 			      },
 			      {
-				        text: "Edit user",
+				        text: "<i class='fas fa-user-edit'>Edit</i>",
 				        className:"btn btn-primary btn-xs dt-edit",
 				        action: function(e, dt, node, config) {
 				        	var data=table.rows( { selected: true }).data();
@@ -264,7 +268,7 @@ $(document).ready( function() {
 				        }
 				  },
 			      {
-				        text: "Delete user",
+				        text: "<i class='fas fa-user-times'>Delete</i>",
 				        className:"btn btn-primary btn-xs dt-delete",
 				        action: function(e, dt, node, config) {
 				        	   						
@@ -328,7 +332,11 @@ $(document).ready( function() {
 			  }
 		    
 		});
+
+
 	
+
+		
 	} );
 
 $("#userCreateForm").submit(function(e){

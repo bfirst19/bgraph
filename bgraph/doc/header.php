@@ -1,6 +1,9 @@
 <?php
-session_start();
-
+if (!isset($_SESSION)) session_start();
+if (!isset($_SESSION['username'])){
+    header("Location: ../user/login");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +33,7 @@ session_start();
 
   <!-- Custom styles for this template-->
   <link href="../css/bg-admin.css" rel="stylesheet">
+  <link href="../css/excel-bootstrap-table-filter-style.css" rel="stylesheet">
 
    <link rel="stylesheet" href="../assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="../assets/vendors/iconfonts/ionicons/css/ionicons.css">
@@ -104,12 +108,12 @@ session_start();
           <span>Dashboard</span>
         </a>
       </li>
-       <li class="nav-item">
+       <!-- li class="nav-item">
               <a class="nav-link" href="../task/mytasks">
                 <i class="fas fa-fw fa-check"></i>
                 <span class="menu-title">Task box</span>
               </a>
-       </li>
+       </li-->
        <li class="nav-item">
               <a class="nav-link" href="../users/user_list">
                 <i class="fas fa-fw fa-users"></i>

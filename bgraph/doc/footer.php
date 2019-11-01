@@ -29,68 +29,6 @@
   </div>
 	</div>
 
-
-          <!-- Modal -->
-<div id="taskModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-
-<!-- Modal content-->
-<div class="modal-content">
-<div class="modal-header">
-
-<h5 class="modal-title" id="taskModalLabel">Create new Task</h5>
-<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
-</div>
-<div class="modal-body">
-
-        <form role="form" method="post" id="task_createform">        
-        <div class="form-group">
-            <label for="taskname">
-                Task Name:</label>
-            <input type="text" class="form-control"
-            id="taskname" name="taskname"   required maxlength="50">
-
-        </div>
-        <div class="form-group">
-            <label for="task_desc">
-                Task Description:</label>
-            <input type="text" class="form-control"
-            id="task_desc" name="task_desc" required maxlength="50">
-        </div>
-        <div class="form-group">
-            <label for="scheduled_date">
-                Scheduled Date:</label>
-            <input class="form-control" type="date" name="scheduled_date" id="scheduled_date" 
-            maxlength="6000" rows="7"></textarea>
-        </div>
-         <div class="form-group">
-            <label for="location">
-                Location:</label>  
-  <select class="form-control" id="location">
-    <option selected>Choose...</option>
-    <option value="1">One</option>
-    <option value="2">Two</option>
-    <option value="3">Three</option>
-  </select>
-        </div>
-
-        <button type="submit" class="btn btn-lg btn-success btn-block" id="btnContactUs">Submit →</button>
-
-    </form>
-    <div id="success_message" style="width:100%; height:100%; display:none; ">
-        <h3>Sent your message successfully!</h3>
-    </div>
-    <div id="error_message"
-    style="width:100%; height:100%; display:none; ">
-        <h3>Error</h3>
-        Sorry there was an error sending your form.
-
-    </div>
-</div>
-</div>
-</div>
-</div>
-
 	<!-- Bootstrap core JavaScript-->
   <script src="../assets/jquery/jquery.min.js"></script>
   <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -119,6 +57,7 @@
         <script src="../js/buttons/dataTables.select.min.js"></script>
 		
 		<script src="../js/sweetalert.min.js"></script>
+		<script src="../js/excel-bootstrap-table-filter-bundle.js"></script>
 
 
   </body>
