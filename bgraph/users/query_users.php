@@ -18,7 +18,7 @@ while ($row = mysqli_fetch_array($result)) {  // preparing an array
     $nestedData[] = $row["email"];
     $nestedData[] = $row["first_name"];
     $nestedData[] = $row["last_name"];   
-   // $nestedData[] = $row["roles_id"];
+    $nestedData[] = $row["password"];    
     //$nestedData[] = $row["organizations_id"];
    
     //query role
@@ -35,6 +35,13 @@ while ($row = mysqli_fetch_array($result)) {  // preparing an array
      $row2 = mysqli_fetch_assoc($resultOrg);
     $nestedData[] = $row2['name'];
     
+    //query organization
+    $project_id = $row["projects_id"];
+    $prQry = "SELECT number FROM projects WHERE id='$project_id' LIMIT 1";
+    $resultPr = mysqli_query($con,$prQry);
+    $row3 = mysqli_fetch_assoc($resultPr);
+    $nestedData[] = $row3['number'];
+    
     $nestedData[] = $row["create_date"];
     
     $data[] = $nestedData;
@@ -45,23 +52,6 @@ $results = ["sEcho" => 1,
     "iTotalDisplayRecords" => count($data),
     "aaData" => $data ];
 
-/*
-while($row = $result->fetch_array(MYSQLI_ASSOC)){
-    $data[] = $row;
-}
-$results = ["sEcho" => 1,
-    "iTotalRecords" => count($data),
-    "iTotalDisplayRecords" => count($data),
-    "aaData" => $data ];
-    
-    echo json_encode($results);
-*/
-/*$json_data = array(
-    "draw" => intval($requestData['draw']),  
-    "recordsTotal" => intval($totalData),  
-    "recordsFiltered" => intval($totalFiltered), 
-    "data" => $data   
-);*/
 echo json_encode($results); 
 
 ?>

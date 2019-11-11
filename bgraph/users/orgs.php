@@ -12,7 +12,7 @@ while ($row = mysqli_fetch_array($result)) {
     //$nestedData = $row['name'];
     
     $return_arr[] = array("id" => $row['id'],
-        "name" => $row['name']);
+        "value" => $row['name']);
     
 }
 $data = $return_arr;
