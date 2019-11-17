@@ -2,7 +2,7 @@
 <project name="HW.makejar" default="deploy" basedir=".">
   <target name ="deploy" description="Create a jar for the HW project">
   	<copy todir="/home/sel/eclipse-workspace/bgraph/bgraph" >  
-  	  <fileset dir="/home/sel/bgraph/app" includes="**/**"/>
+  	  <fileset dir="/home/sel/mnt/app" includes="**/**"/>
   	</copy>
   </target>
 </project>
