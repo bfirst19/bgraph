@@ -1,6 +1,6 @@
 <?php            
 require('../config/db.php');
-//session_start();
+session_start();
 
 // storing  request (ie, get/post) global array to a variable
 $requestData = $_REQUEST;
@@ -26,23 +26,6 @@ $results = ["sEcho" => 1,
     "iTotalDisplayRecords" => count($data),
     "aaData" => $data ];
 
-/*
-while($row = $result->fetch_array(MYSQLI_ASSOC)){
-    $data[] = $row;
-}
-$results = ["sEcho" => 1,
-    "iTotalRecords" => count($data),
-    "iTotalDisplayRecords" => count($data),
-    "aaData" => $data ];
-    
-    echo json_encode($results);
-*/
-/*$json_data = array(
-    "draw" => intval($requestData['draw']),  
-    "recordsTotal" => intval($totalData),  
-    "recordsFiltered" => intval($totalFiltered), 
-    "data" => $data   
-);*/
 echo json_encode($results); 
 
 ?>

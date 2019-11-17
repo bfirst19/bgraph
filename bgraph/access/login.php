@@ -6,8 +6,7 @@
 <title>Login</title>
 
 
-<link href="../css/bootstrap-4.1.3-dist/css/bootstrap.min.css"
-	rel="stylesheet" id="bootstrap-css">
+<link href="../css/bootstrap-material-design.min.css" rel="stylesheet">
 <script src="../js/jquery-3.4.1.min.js"></script>
 <script src="../js/bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
 
@@ -36,7 +35,7 @@ and password='" . md5($password) . "'";
         header("Location: ../doc/dashboard.php");
     } else {       
         echo "
-<div class='container' style='margin-top: 40vh;'>
+<div class='container' style='margin-top: 10vh;'>
         <div class='row align-self-center w-100'>
             <div class='col-6 mx-auto'>
 <div class='card'>
@@ -49,7 +48,7 @@ and password='" . md5($password) . "'";
 } else {
     ?>
 
-    <div class="cotainer" style="margin-top: 40vh;">
+    <div class="cotainer" style="margin-top: 10vh;">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">

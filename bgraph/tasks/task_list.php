@@ -3,7 +3,9 @@
 
 
 
-
+		
+<script src="../js/popper.min.js"></script>
+<script src="../js/tooltip.min.js"></script>
 <!--  script src='../js/fullcalendar/packages/moment/main.js'></script-->
 <script src='../js/fullcalendar/packages/core/main.js'></script>
 
@@ -26,6 +28,7 @@
 
 
 
+
 <script src='../js/fullcalendar/packages/interaction/main.js'></script>
 <script src='../js/fullcalendar/packages/daygrid/main.js'></script>
 <script src='../js/fullcalendar/packages/timegrid/main.js'></script>
@@ -35,6 +38,7 @@
 <script
 	src='../js/fullcalendar/packages-premium/resource-timeline/main.js'></script>
 <script src='../js/fullcalendar/packages/list/main.js'></script>
+
 
 
 
@@ -55,6 +59,17 @@ html, body {
 	max-height: 60%;
 }
 </style>
+
+<style>
+.label {
+	display: inline-block;
+	width: 200px;
+	//
+	or
+	whatever
+}
+</style>
+
 
 <div id='calendar'></div>
 
@@ -103,12 +118,12 @@ html, body {
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label for="station_id"> Station id:</label> <select
+								<label for="station_id"> Station ID:</label> <select
 									class="form-control" id="station_id" name="station_id">
 									<option value="notset" selected="selected">NotSet</option>
                                 <?php
                                 require ('../config/db.php');
-                                $query3 = "select * from roles";
+                                $query3 = "select * from stations";
                                 $result3 = mysqli_query($con, $query3) or die(mysqli_error($con));
                                 while ($row = mysqli_fetch_array($result3)) {
                                     ?>
@@ -127,7 +142,48 @@ html, body {
 									<option value="notset" selected="selected">NotSet</option>
                                 <?php
                                 require ('../config/db.php');
-                                $query3 = "select * from roles";
+                                $query3 = "select * from users";
+                                $result3 = mysqli_query($con, $query3) or die(mysqli_error($con));
+                                while ($row = mysqli_fetch_array($result3)) {
+                                    ?>
+                                
+                                <option
+										value="<?php echo $row['id']; ?>"><?php echo $row['first_name'].$row['last_name']; ?></option>
+                                
+                                <?php }?>
+                              </select>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="station_id"> Project:</label> <select
+									class="form-control" id="project_id" name="project_id">
+									<option value="notset" selected="selected">NotSet</option>
+                                <?php
+                                require ('../config/db.php');
+                                $query3 = "select * from projects";
+                                $result3 = mysqli_query($con, $query3) or die(mysqli_error($con));
+                                while ($row = mysqli_fetch_array($result3)) {
+                                    ?>
+                                
+                                <option
+										value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></option>
+                                
+                                <?php }?>
+                              </select>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="assigned_to"> Checklist:</label> <select
+									class="form-control" id="checklist_id" name="checklist_id">
+									<option value="notset" selected="selected">NotSet</option>
+                                <?php
+                                require ('../config/db.php');
+                                $query3 = "select * from check_list";
                                 $result3 = mysqli_query($con, $query3) or die(mysqli_error($con));
                                 while ($row = mysqli_fetch_array($result3)) {
                                     ?>
@@ -140,6 +196,7 @@ html, body {
 							</div>
 						</div>
 					</div>
+					
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -150,34 +207,174 @@ html, body {
 	</div>
 </div>
 
-
-<div class="modal fade" id="calendarModal" tabindex="-1" role="dialog"
-	aria-labelledby="calendarModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+<!--Edit event modal-->
+<div id="editEventModal" class="modal fade">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="calendarModalLabel">Task Details</h5>
-				<div>					
-					<a href="./edit" class="btn btn-primary btn-sm" role="button"><i class="fa fa-edit">Edit</i></a>
-					<button class="btn btn-primary btn-sm" id="delete-in-modal" type="button"
-						aria-label="Delete">
-						<i class="fa fa-trash">Delete</i>
-					</button>
-					<button class="btn btn-primary btn-sm" type="button" data-dismiss="modal"
-						aria-label="Close">
-						<i class="fa fa-window-close">Close</i>
-					</button>									
-					
-				</div>
-
+				<h5 class="modal-title" id="editEventModalLabel">Edit Task</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
 			</div>
-			<div class="modal-body" id="calendarModalBody">...</div>
-			<div class="modal-footer"></div>
+			<div id="cmodalBody" class="modal-body">
+				<form class="forms-sample" action="" method="post"
+					id="editEventForm">
+					<div class="form-group">
+						<input class="form-control"
+							id="task_id" name="task_id" type="hidden"
+							placeholder="Task id">
+					</div>
+					
+					<div class="form-group">
+						<label for="task_name">Name</label> <input class="form-control"
+							id="task_name" name="task_name" type="text"
+							placeholder="Task Name">
+					</div>
+					<div class="form-group">
+						<label for="task_desc">Description</label>
+						<textarea class="form-control" id="task_desc" name="task_desc"
+							rows="4" placeholder="Description"></textarea>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="starts_at">Starts at</label> <input
+									data-format="dd/MM/yyyy hh:mm:ss" type="date"
+									class="form-control" name="starts_at" id="starts_at"
+									placeholder="Starts at" />
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="ends_at">Ends at</label> <input type="date"
+									class="form-control" name="ends_at" id="ends_at"
+									placeholder="Ends at" />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="station_id"> Station id:</label> <select
+									class="form-control" id="station_id" name="station_id">
+									<option value="notset" selected="selected">NotSet</option>
+                                <?php
+                                require ('../config/db.php');
+                                $query3 = "select * from stations";
+                                $result3 = mysqli_query($con, $query3) or die(mysqli_error($con));
+                                while ($row = mysqli_fetch_array($result3)) {
+                                    ?>
+                                
+                                <option
+										value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></option>
+                                
+                                <?php }?>
+                              </select>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="assigned_to"> Assigned to:</label> <select
+									class="form-control" id="assigned_to" name="assigned_to">
+									<option value="notset" selected="selected">NotSet</option>
+                                <?php
+                                require ('../config/db.php');
+                                $query3 = "select * from users";
+                                $result3 = mysqli_query($con, $query3) or die(mysqli_error($con));
+                                while ($row = mysqli_fetch_array($result3)) {
+                                    ?>
+                                
+                                <option
+										value="<?php echo $row['id']; ?>"><?php echo $row['first_name']; ?></option>
+                                
+                                <?php }?>
+                              </select>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="station_id"> Project:</label> <select
+									class="form-control" id="project_id" name="project_id">
+									<option value="notset" selected="selected">NotSet</option>
+                                <?php
+                                require ('../config/db.php');
+                                $query3 = "select * from projects";
+                                $result3 = mysqli_query($con, $query3) or die(mysqli_error($con));
+                                while ($row = mysqli_fetch_array($result3)) {
+                                    ?>
+                                
+                                <option
+										value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></option>
+                                
+                                <?php }?>
+                              </select>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="assigned_to"> Checklist:</label> <select
+									class="form-control" id="checklist_id" name="checklist_id">
+									<option value="notset" selected="selected">NotSet</option>
+                                <?php
+                                require ('../config/db.php');
+                                $query3 = "select * from check_list";
+                                $result3 = mysqli_query($con, $query3) or die(mysqli_error($con));
+                                while ($row = mysqli_fetch_array($result3)) {
+                                    ?>
+                                
+                                <option
+										value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></option>
+                                
+                                <?php }?>
+                              </select>
+							</div>
+						</div>
+					</div>
+					
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+				<button type="submit" class="btn btn-primary" id="updateEvent">Save</button>
+			</div>
 		</div>
 	</div>
 </div>
 
+<div class="modal fade" id="altViewer-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="calendarModalLabel">Task Details</h5>
+				<div class="dt-buttons btn-group flex-wrap"> 
+					<button class="btn btn-secondary" id="edit-in-modal"
+						type="button" aria-label="Edit">
+						<i class="fa fa-edit">Edit</i>
+					</button>
+					<button class="btn btn btn-secondary" id="delete-in-modal"
+						type="button" aria-label="Delete">
+						<i class="fa fa-trash">Delete</i>
+					</button>
+					<button class="btn btn btn-secondary" type="button"
+						data-dismiss="modal" aria-label="Close">
+						<i class="fa fa-window-close">Close</i>
+					</button>
 
+				</div>
+			</div>
+			<div class="modal-body">
+				<p></p>
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+	</div>
+</div>
 
 
 
@@ -208,17 +405,6 @@ $(function() {
 	  
 	});
 
-
-
-/*
- var eventObject = {
-		    title: title,
-		    start: start,
-		    end: end,
-		    id: id,
-		    color: colour
-		    };
-*/
  
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
@@ -232,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
         right: 'dayGridMonth,timeGridWeek,listWeek,listMonth'
         	//right: 'dayGridMonth,timeGridWeek,timeGridDay,listDay,listWeek,listMonth'
       },
-      defaultDate: '2019-11-02',
+      //defaultDate: '2019-11-02',
       navLinks: true, // can click day/week names to navigate views
       selectable: true,
       selectMirror: true,
@@ -268,14 +454,7 @@ document.addEventListener('DOMContentLoaded', function() {
             	var end = $(".modal-body #ends_at").val();
             	var assigned = $(".modal-body #assigned_to").val();
             	var station = $(".modal-body #station_id").val();            	            	
-            	if (title) {            	
-                calendar.addEvent({
-                  title: title,
-                  start: info.start,
-                  end: info.end, 
-                  allDay:info.allDay         
-                })
-              }
+            	
               $('#saveEvent').unbind('click');
               
               $.ajax({
@@ -283,30 +462,27 @@ document.addEventListener('DOMContentLoaded', function() {
       			url: "./create",				
       			data: $('form#createEventForm').serialize(),
       			success: function(res){
-      				if(res.indexOf('created') >-1){
-      					swal({
-      						  title: "Success",
-      						  text: res,
-      						  icon: "success",
-      						});
-      				}else
-      				{
-      					swal({
-      						  title: "Failed",
-      						  text: res,
-      						  icon: "error",
-      						});
-      				}			
+      			console.log("created task."+res);	
+      			calendar.refetchEvents();  		
                      
-      			},
-      			error: function(resp){
+      			},error: function(resp){
       				console.log("Error");
       				console.log(resp);
       			}
       		});
-              $('#createEventModal').modal('hide');
-              $("form#createEventForm").trigger("reset");
+        		
+             /* if (title) {            	
+                  calendar.addEvent({
+                    title: title,
+                    start: info.start,
+                    end: info.end, 
+                    allDay:info.allDay         
+                  })
+                }*/
               
+              $('#createEventModal').modal('hide');
+              $("form#createEventForm").trigger("reset");   
+                       
         		                          	
             });
 
@@ -316,11 +492,163 @@ document.addEventListener('DOMContentLoaded', function() {
       eventLimit: true, // allow "more" link when too many events
       eventClick: function(info) {  
     	 	info.jsEvent.preventDefault();     
-    	 	//console.log(info);        	                            
-    	  $('#calendarModalTitle').html(info.event.title);
-          $('#calendarModalBody').html(info.event.title);
-          $('#calendarModal').modal();
+    	 	console.log(info.event);      	 	           
 
+    	 	   	  
+    	 	 var data = "<form name='altDeletor-form' role='form'>";
+				
+            var taskob;
+             $.ajax({
+					type:"POST",
+					async:false,
+					url:"./get_task",
+					data:{'id':info.event.id},
+					success:function(resp){
+						//console.log("response "+ resp);
+						taskob = resp;
+						///console.log("ttassk "+ task);
+					}	
+       	 	});
+
+             var task = $.parseJSON (taskob)[0];
+                                              
+   			data += 	"<div style='margin-left: initial;margin-right: initial;' class='form-group row'> <label for='Task_Name'><b>Task Name:&nbsp</b></label>"+                       
+     		"<div class='wrapper'><input  type='hidden'  id='Task_Name' name='Task_Name' placeholder='Task Name' "+"style='overflow:hidden'  class='form-control'"+ 
+     		"value='"+ info.event.title +"'></input><span>"+ info.event.title +"</span></div></div>";
+     		data += 	"<div style='margin-left: initial;margin-right: initial;' class='form-group row'> <label for='Task_Desc'><b>Task Description:&nbsp</b></label>"+                       
+     		"<input  type='hidden'  id='Task_Desc' name='Task_Desc' placeholder='Task Description' "+"style='overflow:hidden'  class='form-control'"+ 
+     		"value='"+ "Hello33" +"'></input>"+ "Hello" +"</div>";
+     		
+     		data += 	"<div class='row'><div class='col-sm-6'><div style='margin-left: initial;margin-right: initial;' class='form-group row'> <label for='Starts_at'><b>Starts at:&nbsp</b></label>"+                       
+     		"<input  type='hidden'  id='Starts_at' name='Starts_at' placeholder='Starts at' "+"style='overflow:hidden'  class='form-control'"+ 
+     		"value='"+ info.event.start.toLocaleString() +"'></input>"+  info.event.start.toLocaleString() +"</div></div>";
+     		data += 	"<div class='col-sm-6'><div style='margin-left: initial;margin-right: initial;' class='form-group row'> <label for='Ends_at'><b>Ends at:&nbsp</b></label>"+                       
+     		"<input  type='hidden'  id='Ends_at' name='Ends_at' placeholder='Ends at' "+"style='overflow:hidden'  class='form-control'"+ 
+     		"value='"+  info.event.end.toLocaleString() +"'></input>"+  info.event.end.toLocaleString() +"</div></div></div>";
+
+     		data += 	"<div class='row'><div class='col-sm-6'><div style='margin-left: initial;margin-right: initial;' class='form-group row'> <label for='station_id'><b>Station id:&nbsp</b></label>"+                       
+     		"<input  type='hidden'  id='station_id' name='station_id' placeholder='Station id' "+"style='overflow:hidden'  class='form-control'"+ 
+     		"value='"+ task.station_id +"'></input>"+ task.station_id +"</div></div>";
+     		data += 	"<div class='col-sm-6'><div style='margin-left: initial;margin-right: initial;' class='form-group row'> <label for='sroject_id'><b>Project id:&nbsp</b></label>"+                       
+     		"<input  type='hidden'  id='project_id' name='project_id' placeholder='Project' "+"style='overflow:hidden'  class='form-control'"+ 
+     		"value='"+ task.project_id +"'></input>"+ task.project_id +"</div></div></div>";
+     		
+     		data += 	"<div class='row'><div class='col-sm-6'><div style='margin-left: initial;margin-right: initial;' class='form-group row'> <label for='Status_task'><b>Status:&nbsp</b></label>"+                       
+     		"<input  type='hidden'  id='Status_task' name='Status_task' placeholder='Status' "+"style='overflow:hidden'  class='form-control'"+ 
+     		"value='"+ "Not Started" +"'></input>"+ "Not Started" +"</div></div>";                    		
+     		data += 	"<div class='col-sm-6'><div style='margin-left: initial;margin-right: initial;' class='form-group row'> <label for='assigned_to'><b>Assigned to:&nbsp</b></label>"+                       
+     		"<input  type='hidden'  id='assigned_to' name='assigned_to' placeholder='Assigned to' "+"style='overflow:hidden'  class='form-control'"+ 
+     		"value='"+ task.assigned_to +"'></input>"+ task.assigned_to +"</div</div></div></div></div>";
+     		
+     		data += 	"<div class='row'><div class='col-sm-6'><div style='margin-left: initial;margin-right: initial;' class='form-group row'> <label for='checklist_id'><b>Check List id:&nbsp</b></label>"+                       
+     		"<input  type='hidden'  id='checklist_id' name='checklist_id' placeholder='Check List' "+"style='overflow:hidden'  class='form-control'"+ 
+     		"value='"+ task.checklist_id +"'></input>"+ task.checklist_id+"</div></div></div></form>";
+     		
+      	 			
+
+                            //date += "</form>";
+
+                              
+                             var selector = $('#altViewer-modal');
+                             var select2or = this.modal_selector;
+                             console.log('data:'+select2or);
+                             
+                             $(selector).on('show.bs.modal', function () { 
+                                             				
+                                 var btns = '<div class="dt-buttons btn-group flex-wrap"><button class="btn btn-secondary" id="edit-in-modal" type="button" aria-label="Edit"><i class="fa fa-edit">Edit</i></button>' +
+                                     '<button class="btn btn-secondary" id="delete-in-modal" type="button" aria-label="Delete"> <i class="fa fa-trash">Delete</i> </button>'+
+                                     '<button class="btn btn-secondary" type="button" data-dismiss="modal" aria-label="Close"> <i class="fa fa-window-close">Close</i> </button></div>';
+                                 $(selector).find('.modal-title').html("Task Details");                                
+                          	 	
+                                 $(selector).find('.modal-body').html(data);
+                                // $(selector).find('.modal-header').html(btns);
+                             });
+
+                                                       
+                             $(selector).modal('show');                           
+                             $(selector).trigger("alteditor:some_dialog_opened").trigger("alteditor:delete_dialog_opened");
+
+                            /* var taskob;
+                             $.ajax({
+               					type:"POST",
+               					async:false,
+               					url:"./get_task",
+               					data:{'id':info.event.id},
+               					success:function(resp){
+               						//console.log("response "+ resp);
+               						taskob = resp;
+               						///console.log("ttassk "+ task);
+               					}	
+                       	 	});
+
+                             var task = $.parseJSON (taskob)[0];
+                             console.log(task.assigned_to);*/
+                             
+                             //edit modal open
+                             $("#edit-in-modal").on('click', function(e){  
+                            	 e.preventDefault(); 
+                            	
+                            	 var editor = $('#editEventModal');
+
+                            	 $(editor).find("#starts_at").flatpickr({
+                                    defaultDate:info.event.start.toISOString(),
+                                 	enableTime:true
+                                 });
+                            	 $(editor).find("#ends_at").flatpickr({
+                                     defaultDate:info.event.end.toISOString(),
+                                     enableTime:true
+                                 });
+                                
+                            	$(editor).find(".modal-body #task_id").val(info.event.id);
+                              	$(editor).find(".modal-body #task_name").val(info.event.title);
+                             	$(editor).find(".modal-body #task_desc").val(info.event.title);
+                             	$(editor).find(".modal-body #task_desc").val(info.event.title);
+                             	$(editor).find(".modal-body #station_id").val(task.station_id);
+                             	$(editor).find(".modal-body #assigned_to").val(task.assigned_to);
+                             	$(editor).find(".modal-body #checklist_id").val(task.checklist_id);
+                             	$(editor).find(".modal-body #project_id").val(task.project_id);
+
+                             	$('#altViewer-modal').modal('hide');
+
+                             	$('#edit-in-modal').unbind('click');
+                             	                             	 
+                            	$(editor).modal('show');                             	
+                            	         
+                            	 $('#updateEvent').on('click', function(e){
+                                 	e.preventDefault(); 
+                                   var title = $(editor).find(".modal-body #task_name").val();                                 	
+                                	var start = $(editor).find(".modal-body #starts_at").val();
+                                	var end = $(editor).find(".modal-body #ends_at").val();
+                                  /* if (title) {            	
+                                       calendar.addEvent({
+                                         title: title,
+                                         start: info.start,
+                                         end: info.end, 
+                                         allDay:info.allDay         
+                                       })
+                                     }*/
+                                   $('#updateEvent').unbind('click');
+                                   
+                                   $.ajax({
+                           			type: "POST",
+                           			url: "./edit",				
+                           			data: $('form#editEventForm').serialize(),
+                           			success: function(res){
+                           			calendar.refetchEvents();
+                           			console.log("created task."+res);			
+                                          
+                           			},error: function(resp){
+                           				console.log("Error");
+                           				console.log(resp);
+                           			}
+                           		});
+                                   $('#editEventModal').modal('hide');
+                                   $("form#editEventForm").trigger("reset");              
+                             		                          	
+                                 });
+                            	 
+                             });                  
+        
           //delete modal
           $("#delete-in-modal").on('click', function(e){             
               console.log("added to root"+info.event.id);
@@ -339,22 +667,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		                 url:'./delete',
 		                 data:{'del_id':info.event.id},
 		                 success: function(res){
-		                	 		$('#calendarModal').modal('hide');				                 
-		                	 		calendar.refetchEvents();		                	 				                	 				                	 	     								     					
-			     					if(res.indexOf('deleted') >-1){
-			     						swal({
-				     						  title: "Success",
-				     						  text: res,
-				     						  icon: "success",
-				     						});
-			     					}else
-			     					{
-			     						swal({
-				     						  title: "Failed",
-				     						  text: res,
-				     						  icon: "error",
-				     						});
-			     					}
+		                	 		$('#altViewer-modal').modal('hide');				                 
+		                	 		calendar.refetchEvents();	                	 				                	 				                	 	     								     					
+			     				
 		                  }
 
 		                 });
@@ -364,14 +679,26 @@ document.addEventListener('DOMContentLoaded', function() {
           });          
           
     	}, 
+    	 eventRender: function(info) {             
+             /*var tooltip = new Tooltip(info.el, {
+                 title: info.event.extendedProps.title,
+                 placement: 'top',
+                 trigger: 'hover',
+                 container: 'body'
+               });*/			
+            	 
+             },
       events: [],
       eventSources:[{
           url:'./query_tasks',
           //color: 'yellow',
-          textColor: 'black'
+          textColor: 'black',
           
       }]
-        
+     
+
+
+             //end of calendar   
     });
 
     calendar.render();    
@@ -382,6 +709,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
  </script>
-
 
 

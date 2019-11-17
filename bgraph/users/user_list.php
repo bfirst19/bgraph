@@ -1,15 +1,20 @@
 <?php include '../doc/header.php'; ?>
 
 
- <div style="background-color: rgba(0,0,255,.1)" ><h6 align="left">Users List</h6></div>
- <table id="users_table_id" class="table table-striped table-bordered" style="width:100%" >
-    
+<div style="background-color: rgba(0, 0, 255, .1)">
+	<h6 align="left">Users List</h6>
+</div>
+<table id="users_table_id" class="table table-striped table-bordered"
+	style="width: 100%">
+
 </table>
 
 <?php include '../doc/footer.php'; ?>
 
 <script type="text/javascript">
 
+$(document).ready( function() {
+	
 jQuery.extend({
 	getValues: function(url) {
         var result ={};
@@ -75,6 +80,7 @@ var columnDefs = [{
     	 //if (data == null || !(data in roles)) return null;    	 
     	 return data;
     }
+    
   }, {
 	    title: "Organization",
 	    name:"organization",
@@ -82,7 +88,7 @@ var columnDefs = [{
 	    options : orgs,
 	    select2 : { width: "100%"},
 	    render: function (data, type, row, meta) {
-	    	// if (data == null || !(data in orgs)) return null;	    	 
+	    	// if (data == null || !(data in orgs)) return null;	    		    	 
 	    	return data;
 	    }
 	     
@@ -103,7 +109,7 @@ var columnDefs = [{
 	    readonly:true   
 }];
 
-$(document).ready( function() {
+
 	// after table aply filter
  	//$('#users_table_id').excelTableFilter();
  	
@@ -148,7 +154,7 @@ $(document).ready( function() {
               name: 'delete'      
           }//,"copy","excel","pdf",""print"
           ],
-          onAddRow: function(datatable, rowdata, success, error) {
+          onAddRow: function(alteditor, rowdata, success, error) {
               console.log(rowdata);              
         	  $.ajax({
       			type: "POST",
@@ -156,18 +162,23 @@ $(document).ready( function() {
       			data: rowdata,
       			success: function(resp){ 
       				var table = $('#users_table_id').DataTable();				
-    				table.ajax.reload();  				
+    				table.ajax.reload();  
+    									
+				if(resp.indexOf('Error')>-1){
       				swal({
-      					  title: "Success",
+      					  title: "Error",
       					  text: resp,
-      					  icon: "success",
-      					});				
+      					  icon: "error",
+      					});	
+					}else{
+						$(alteditor.modal_selector).modal('hide');
+					}			
                    
       			},
       			error: error
       		});
           },
-          onDeleteRow: function(datatable, rowdata, success, error) { 
+          onDeleteRow: function(alteditor, rowdata, success, error) { 
         	  swal({
         		  title: "Are you sure?",
         		  text: "Are you sure want to delete the station?",
@@ -192,22 +203,27 @@ $(document).ready( function() {
       		     
         	  
           },
-          onEditRow: function(datatable, rowdata, success, error) {
+          onEditRow: function(alteditor, rowdata, success, error) {              
         	  $.ajax({
         			type: "POST",
         			url: "./editUser",				
         			data: rowdata,
         			success: function(resp){   	
         				var table = $('#users_table_id').DataTable();				
-        				table.ajax.reload();			
+        				table.ajax.reload();
+        				if(resp.indexOf('Error') >-1){			
         				swal({
-        					  title: "Success",
+        					  title: "Error",
         					  text: resp,
-        					  icon: "success",
+        					  icon: "error",
         					});				
-                     
+        				}else{
+        					$(alteditor.modal_selector).modal('hide');	
+        				}
         			},
         			error: error
+
+        			
         		});
           }
 		    

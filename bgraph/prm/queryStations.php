@@ -15,9 +15,19 @@ while ($row = mysqli_fetch_array($result)) {  // preparing an array
     $nestedData = array();
     $nestedData[] = [];
     $nestedData[] = $row["id"];
+    $nestedData[] = $row["station_id"];
     $nestedData[] = $row["name"];
-    $nestedData[] = $row["type"];
-    $nestedData[] = $row["station_id"];    
+    
+    //query type
+    $role_id = $row["station_type_id"];
+    $roleQry = "SELECT * FROM station_type WHERE id='$role_id' LIMIT 1";
+    $resultRole = mysqli_query($con,$roleQry);
+    $row1 = mysqli_fetch_assoc($resultRole);    
+    $nestedData[] = $row1["type_value"];  
+    
+    $nestedData[] = $row["station_address"];
+    $nestedData[] = $row["lat"];
+    $nestedData[] = $row["lon"];
     $nestedData[] = $row["created_by"];
     $nestedData[] = $row["create_date"];
     $data[] = $nestedData;

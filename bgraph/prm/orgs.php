@@ -1,83 +1,54 @@
 <?php include '../doc/header.php'; ?>
 
 
-<style>
-  div.dt-buttons {
-   float: left;
-   margin-left:10px;
-}
-</style>
-        <div><h6 align="center">Organization List</h6></div>
-<table id="orgs_table_id" class="table table-striped table-bordered" style="width:100%">
-    <thead>
-        <tr>
-            <!--th>User ID</th-->
-            <th></th>
-            <th>Org id</th>
-            <th>Org Name</th>
-            <th>Created On</th>  
-            <th>Created By</th>           
-        </tr>
-    </thead>
-    <tbody>
-    			
-       
-    </tbody>
+
+<div style="background-color: rgba(0,0,255,.1)" ><h6 align="left">Organization List</h6></div>       
+<table id="orgs_table_id" class="table table-striped table-bordered" style="width:100%">    
 </table>
+
+
+
 <?php include '../doc/footer.php'; ?>
 
 
-
-<!-- New Role Modal-->
-  <div class="modal fade" id="newOrgModal" tabindex="-1" role="dialog" aria-labelledby="newOrgModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="newOrgModalLabel">Create new organization</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">       
-        <form class="forms-sample" action="" method="post" id="orgCreateForm">
-        			<div class="form-group">
-                        <label for="org_name">Name</label>                        
-						<input type="text" class="form-control" id="org_name" name="org_name" placeholder="Organization name" required />
-                      </div>
-                      
-                      <div class="form-group">
-                        <label for="created_by">Created by</label>                        
-						<input type="text" class="form-control" id="created_by"  readonly="readonly" name="created_by" placeholder="Created By"  value="<?php echo $_SESSION['username']; ?>"/>
-                      </div>
-                                                         
-					  <input type="submit" name="saveOrg" value="Save" class="btn btn-success mr-2">                     
-                      <input class="btn btn-outline-dark" type="button" data-dismiss="modal" aria-label="Cancel" value="Cancel">
-                    </form>
-        
-        </div>
-        <div class="modal-footer">
-          <!-- button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>   
-          <button class="btn btn-primary" type="submit" data-dismiss="modal">Save</button-->         
-        </div>
-      </div>
-    </div>
- 
-</div>
-
-
-
 <script type="text/javascript">
+
+var columnDefs = [{
+    title: "",
+    id:"",
+    type:"hidden"
+  }, {
+    title: "Id",
+    name:"id",
+    type: "readonly"    
+  }, {
+    title: "Organization Name",
+    name:"name",
+    type:"text"    
+  }, {
+    title: "Created On",
+    name:"create_date",
+    type: "readonly"
+  }, {
+    title: "Created By",
+    name:"created_by" ,
+    type: "readonly"   
+  }];
+
+
 $(document).ready( function() {
 	 var table = $('#orgs_table_id').DataTable({		  
 		  "dom": '<"dt-buttons"lr><"clear">fBtip',
-		  "responsive": false,
+		  "responsive": true,
           "processing": true,
           "serverSide": false,
+          altEditor: true,
           "ajax": {
-              url: "./queryOrgs", // json datasource
+              url: "./queryOrgs ", // json datasource
               //data: {action: 'getEMP'},  Set the POST variable  array and adds action: getEMP
               type: 'post',  // method  , by default get
           },
+          columns: columnDefs,
           columnDefs: [ {
               orderable: false,
               className: 'select-checkbox',
@@ -88,91 +59,90 @@ $(document).ready( function() {
               selector: 'td:first-child'
           },
           order: [[ 1, 'asc' ]],
-		  buttons: {
-			    buttons: [
-			      {
-			        text: "<i class='fas fa-sitemap'>New</i>",
-			        className:"btn btn-primary btn-xs dt-add",
-			        action: function(e, dt, node, config) {
-			        	$('#newOrgModal').modal('show');			        				        	 
-			        }
-			      },
-			      {
-				        text: "<i class='fas fa-minus-circle'>Delete</i>",
-				        className:"btn btn-primary btn-xs dt-edit",
-				        action: function(e, dt, node, config) {
-				        	var data=table.rows( { selected: true }).data();				        	
-				        	var id = data[0][1];
-				        	 $.ajax({
-				                 type:'POST',
-				                 url:'./deleteOrg',
-				                 data:{'del_id':id},
-				                 success: function(res){					                 
-					                
-					                	 var table = $('#orgs_table_id').DataTable();				
-					     					table.ajax.reload();
-					     					if(res.indexOf('deleted') >-1){
-					     						swal({
-						     						  title: "Success",
-						     						  text: res,
-						     						  icon: "success",
-						     						});
-					     					}else
-					     					{
-					     						swal({
-						     						  title: "Failed",
-						     						  text: res,
-						     						  icon: "error",
-						     						});
-					     					}
-				     											                	 
-					                      
-				                  }
+          buttons: [{
+              text: "<i class='fas fa-plus-circle'>Add</i>",
+              name: 'add'        
+          },
+          {
+              extend: 'selected', 
+              text: "<i class='fas fa-edit'>Edit </i>",
+              name: 'edit'        
+          },
+          {
+              extend: 'selected', 
+              text: "<i class='fas fa-minus-circle'>Delete</i>",
+              name: 'delete'      
+          }//,"copy","excel","pdf",""print"
+          ],
+          onAddRow: function(datatable, rowdata, success, error) {              
+        	  $.ajax({
+      			type: "POST",
+      			url: "./createOrg",				
+      			data: rowdata,
+      			success: function(resp){ 
+      				var table = $('#orgs_table_id').DataTable();				
+    				table.ajax.reload();  
+    				 $(datatable.modal_selector).modal('hide');				
+      				/*swal({
+      					  title: "Success",
+      					  text: resp,
+      					  icon: "success",
+      					});				
+                   */
+      			},
+      			error: error
+      		});
+          },          
+          onDeleteRow: function(datatable, rowdata, success, error) { 
 
-				                 });
-				        }
-				  }			      
-			    ],
-			    dom: {
-			      button: {
-			        tag: "button",
-			        className: "btn btn-primary"
-			      },
-			      buttonLiner: {
-			        tag: null
-			      }
-			    }
-			  }
+        	  swal({
+        		  title: "Are you sure?",
+        		  text: "Are you sure want to delete the Organization?",
+        		  icon: "warning",
+        		  buttons: true,
+        		  dangerMode: true,
+        		})
+        		.then((willDelete) => {
+        		  if (willDelete) {
+        			  $.ajax({
+     	                 type:'POST',
+     	                 url:'./deleteOrg',
+     	                 data:rowdata,
+     	                 success: success,
+     	        		 error: error	        		
+
+     	                 });	
+        		  } else {
+        		    swal("Organization not deleted");
+        		  }
+        		});
+      		     
+        	  
+          },
+          onEditRow: function(datatable, rowdata, success, error) {
+        	  $.ajax({
+        			type: "POST",
+        			url: "./editOrg",				
+        			data: rowdata,
+        			success: function(resp){   	
+        				var table = $('#orgs_table_id').DataTable();				
+        				table.ajax.reload();
+        				 $(datatable.modal_selector).modal('hide');			
+        				/*swal({
+        					  title: "Success",
+        					  text: resp,
+        					  icon: "success",
+        					});		*/		
+                     
+        			},
+        			error: error
+        		});
+          }			  
 		    
 		});
 	
 	} );
 
 
-$("#orgCreateForm").submit(function(e){
-	  e.preventDefault();
-	console.log($('form#orgCreateForm').serialize());		 
-	 $.ajax({
-			type: "POST",
-			url: "./createOrg",				
-			data: $('form#orgCreateForm').serialize(),
-			success: function(response){
-				$('#newOrgModal').modal('hide');
-				$("form#orgCreateForm").trigger("reset");
-				var table = $('#orgs_table_id').DataTable();				
-				table.ajax.reload();
-				swal({
-					  title: "Success",
-					  text: "Organization created successfully!",
-					  icon: "success",
-					});				
-             
-			},
-			error: function(resp){
-				console.log("Error");
-				console.log(resp);
-			}
-		});
-		return false;
-	});
+
 </script>

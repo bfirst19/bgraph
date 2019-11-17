@@ -1,135 +1,160 @@
 <?php include '../doc/header.php'; ?>
 
 
-<style>
-  div.dt-buttons {
-   float: left;
-   margin-left:10px;
-}
-</style>
-        
+
+<div style="background-color: rgba(0,0,255,.1)" ><h6 align="left">Project List</h6></div>
 <table id="projects_table_id" class="table table-striped table-bordered" style="width:100%">
-    <thead>
-        <tr>
-            <!--th>User ID</th-->
-            <th></th>
-            <th>Id</th>
-            <th>Number</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Start date</th>  
-            <th>End date</th> 
-            <th>Manager</th> 
-            <th>Customer name</th>           
-        </tr>
-    </thead>
-    <tbody>
-    			
-       
-    </tbody>
+    
 </table>
 <?php include '../doc/footer.php'; ?>
 
 <script type="text/javascript">
+
+var columnDefs = [{
+    title: "",
+    id:"",
+    type:"hidden"
+  }, {
+    title: "Id",
+    name:"id",
+    type: "hidden"    
+  }, {
+    title: "Number",
+    name:"number",
+    type: "readonly"   
+  }, {
+	    title: "Name",
+	    name:"name"  
+	},
+	{
+	    title: "Description",
+	    name:"description"  
+	},
+	{
+		    title: "Start Date",
+		    name:"start_date",
+		    type:"date"
+	},
+	{
+	    title: "End Date",
+	    name:"end_date",
+	    type:"date"
+	},
+	{
+	    title: "Manager",
+	    name:"Manager"  
+	},
+	{
+	    title: "Customer",
+	    name:"customer_name"  
+	}];
+                    
 $(document).ready( function() {
 	 var table = $('#projects_table_id').DataTable({		  
-		  "dom": '<"dt-buttons"lr><"clear">fBtip',
-		  "responsive": false,
+		 "dom": '<"dt-buttons"lr><"clear">fBtip',
+		  "responsive": true,
           "processing": true,
           "serverSide": false,
+          select: 'single',
+          altEditor: true,
           "ajax": {
               url: "./queryProjects", // json datasource
               //data: {action: 'getEMP'},  Set the POST variable  array and adds action: getEMP
               type: 'post',  // method  , by default get
           },
+          columns:columnDefs,
           columnDefs: [ {
               orderable: false,
               className: 'select-checkbox',
               targets:   0
+          }, {              
+              targets:   1,
+              visible:false
           } ],
-          select: {
-              style:    'os',
-              selector: 'td:first-child'
-          },
+          
           order: [[ 1, 'asc' ]],
-		  buttons: {
-			    buttons: [
-			      {
-			        text: "Create new Organization",
-			        className:"btn btn-primary btn-xs dt-add",
-			        action: function(e, dt, node, config) {
-			        	$('#newOrgModal').modal('show');			        				        	 
-			        }
-			      },
-			      {
-				        text: "Delete Organization",
-				        className:"btn btn-primary btn-xs dt-edit",
-				        action: function(e, dt, node, config) {
-				        	var data=table.rows( { selected: true }).data();				        	
-				        	var orgname = data[0][1];
-				        	 $.ajax({
-				                 type:'POST',
-				                 url:'./deleteOrg',
-				                 data:{'del_id':orgname},
-				                 success: function(res){					                 
-					                 if(res == 0){
-					                	 var table = $('#orgs_table_id').DataTable();				
-					     					table.ajax.reload();
-					     					swal({
-					     						  title: "Success",
-					     						  text: "Organization deleted successfully!",
-					     						  icon: "success",
-					     						});	
-				     											                	 
-					                      }else{
-					                	 	alert('Invalid ID.');
-					                      }
-				                  }
+          buttons: [{
+              text: "<i class='fas fa-plus-circle'>Add</i>",
+              name: 'add'        
+          },
+          {
+              extend: 'selected', 
+              text: "<i class='fas fa-edit'>Edit </i>",
+              name: 'edit'
+          },
+          {
+              extend: 'selected', 
+              text: "<i class='fas fa-minus-circle'>Delete</i>",
+              name: 'delete'      
+          }],//,"copy","excel","pdf",""print"],
+          onAddRow: function(datatable, rowdata, success, error) {
+        	  console.log(rowdata);              
+        	  $.ajax({
+      			type: "POST",
+      			url: "./createProject",				
+      			data: rowdata,
+      			success: function(resp){ 
+      				var table = $('#projects_table_id').DataTable();				
+    				table.ajax.reload();  
+    				 $(datatable.modal_selector).modal('hide');					
+      				/*swal({
+      					  title: "Success",
+      					  text: resp,
+      					  icon: "success",
+      					});			*/	
+                   
+      			},
+      			error: error
+      		});
+              
+          },
+          onDeleteRow: function(datatable, rowdata, success, error) {         	  
+        	  swal({
+        		  title: "Are you sure?",
+        		  text: "Are you sure want to delete the Project?",
+        		  icon: "warning",
+        		  buttons: true,
+        		  dangerMode: true,
+        		})
+        		.then((willDelete) => {            		
+        		  if (willDelete) {
+        			  $.ajax({
+     	                 type:'POST',
+     	                 url:'./deleteProject',
+     	                 data:rowdata,
+     	                 success: success,
+     	        		 error: error	        		
 
-				                 });
-				        }
-				  }			      
-			    ],
-			    dom: {
-			      button: {
-			        tag: "button",
-			        className: "btn btn-primary"
-			      },
-			      buttonLiner: {
-			        tag: null
-			      }
-			    }
-			  }
+     	                 });	
+        		  } else {
+        		    swal("Project not deleted");
+        		  }
+        		});
+      		     
+        	  
+          },
+          onEditRow: function(datatable, rowdata, success, error) {
+        	  $.ajax({
+        			type: "POST",
+        			url: "./editProject",				
+        			data: rowdata,
+        			success: function(resp){   	
+        				var table = $('#projects_table_id').DataTable();				
+        				table.ajax.reload();	
+        				 $(datatable.modal_selector).modal('hide');			
+        				/*swal({
+        					  title: "Success",
+        					  text: resp,
+        					  icon: "success",
+        					});		*/		
+                     
+        			},
+        			error: error
+        		});
+          }
 		    
 		});
 	
 	} );
 
-
-$("#orgCreateForm").submit(function(e){
-	  e.preventDefault();
-	console.log($('form#orgCreateForm').serialize());		 
-	 $.ajax({
-			type: "POST",
-			url: "./createOrg",				
-			data: $('form#orgCreateForm').serialize(),
-			success: function(response){
-				$('#newOrgModal').modal('hide');
-				$("form#orgCreateForm").trigger("reset");
-				var table = $('#orgs_table_id').DataTable();				
-				table.ajax.reload();
-				swal({
-					  title: "Success",
-					  text: "Organization created successfully!",
-					  icon: "success",
-					});				
-             
-			},
-			error: function(resp){
-				console.log("Error");
-				console.log(resp);
-			}
-		});
-		return false;
-	});
 </script>

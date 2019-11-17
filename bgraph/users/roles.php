@@ -6,7 +6,7 @@ $result = mysqli_query($con, $query) or die(mysqli_error($con));
 $data;
 while ($row = mysqli_fetch_array($result)) {
     $nestedData = array();
-    $nestedData[] = [];
+    //$nestedData[] = [];
     
     //$nestedData = $row['id'];
     //$nestedData = $row['name'];
