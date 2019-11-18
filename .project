@@ -20,4 +20,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>app</name>
+			<type>2</type>
+			<location>/home/sel/bgraph/app</location>
+		</link>
+	</linkedResources>
 </projectDescription>
