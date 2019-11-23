@@ -22,9 +22,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>app</name>
+			<name>mnt.bgraph.com</name>
 			<type>2</type>
-			<location>/home/sel/bgraph/app</location>
+			<location>/home/sel/bgraph/mnt.bgraph.com</location>
 		</link>
 	</linkedResources>
 </projectDescription>
