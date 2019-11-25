@@ -19,6 +19,10 @@ if (! isset($_SESSION['username'])) {
 <meta name="description" content="">
 <meta name="author" content="">
 
+<link rel="shortcut icon" href="../favicon/favicon.ico">
+<link rel="icon" type="image/gif" href="../favicon/animated_favicon1.gif">
+
+
 <title>Bluegrap Admin - Dashboard</title>
 
 <!-- bootstrap  -->
@@ -30,7 +34,7 @@ if (! isset($_SESSION['username'])) {
 	rel="stylesheet">
 
 <link rel="stylesheet" href="../css/flatpickr.min.css">
-
+<link rel="stylesheet" href="../css/excel-bootstrap-table-filter-style.css">
 
 <!-- dataTable css -->
 <link rel="stylesheet"
@@ -114,10 +118,10 @@ $u_email = $_SESSION['email'];
 
 	<div id="wrapper">
 
-		<ul class="sidebar navbar-nav navbar-dark bg-light">
+		<ul class="sidebar navbar-nav navbar-dark bg-light toggled">
 			<li class="nav-item active"><a class="nav-link"
-				href="../doc/dashboard"> <i class="fas fa-fw fa-tachometer-alt"></i>
-					<span>Dashboard</span>
+				href="../doc/dashboard"> <i class="fas fa-envelope"></i>
+					<span>Inbox</span>
 			</a></li>
 
 			<li class="nav-item"><a class="nav-link" href="../prm/roles"> <i
@@ -146,20 +150,17 @@ $u_email = $_SESSION['email'];
 						Management</span>
 			</a></li>
 		
+		
+			<li class="nav-item"><a class="nav-link" href="../tpl/checklist_designer"> <i
+					class="fas fa-fw fa-file-code"></i> <span class="menu-title">Checklist
+						Designer</span>
+			</a></li>
 
-			<li class="nav-item dropdown"><a class="nav-link dropdown-toggle"
-				href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
-				aria-haspopup="true" aria-expanded="false"> <i
-					class="fas fa-fw fa-folder"></i> <span class="menu-title">Checklist Management</span>
-			</a>
-				<div class="dropdown-menu" aria-labelledby="pagesDropdown">
-					<!-- h6 class="dropdown-header">Checklist Manager</h6-->
-					<a class="dropdown-item" href="../tpl/checklist_designer">Checklist
-						Designer</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="../tpl/templates">Checklist Templates</a>
-				</div></li>
-
+			<li class="nav-item"><a class="nav-link" href="../tpl/templates"> <i
+					class="fas fa-list-alt"></i> <span class="menu-title">Checklist
+						Templates</span>
+			</a></li>
+			
 
 			<li class="nav-item"><a class="nav-link" href="../tpl/checklists"> <i
 					class="fas fa-clipboard-list"></i> <span class="menu-title">Report

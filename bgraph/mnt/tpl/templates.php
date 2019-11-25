@@ -38,7 +38,7 @@ var columnDefs = [{
       "mData": null,
       "bSortable": false,
       "mRender": function(data, type, full) {
-        return '<a class="btn btn-info btn-sm" href=./view' + full[0] + '>' + 'View' + '</a>';
+        return '<a class="btn btn-info btn-sm dt-view" href=./view?id=' + full[1] + '>' + 'View' + '</a>';
       }
   }
   ];
@@ -60,7 +60,7 @@ $(document).ready( function() {
           columnDefs: [ {
               orderable: false,
               className: 'select-checkbox',
-              targets:   0
+              targets:  0
           } ],
           select: {
               style:    'os',
@@ -104,6 +104,12 @@ $(document).ready( function() {
          	  
 		    
 		});
+
+	 $('#checklist_table_id tbody').on( 'click', 'a', function () {
+	        var data = table.row( $(this).parents('tr') ).data();	       
+	        $(this).attr('target','_self');
+	    } );
+	    
 	
 	} );
 

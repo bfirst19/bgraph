@@ -1,7 +1,5 @@
 <?php include '../doc/header.php'; ?>
 
-<div id='calendar'></div>
-
 
 
 <script src="../js/popper.min.js"></script>
@@ -39,9 +37,6 @@
 	src='../js/fullcalendar/packages-premium/resource-timeline/main.js'></script>
 <script src='../js/fullcalendar/packages/list/main.js'></script>
 
-<?php include '../doc/footer.php'; ?>
-
-
 
 
 <style>
@@ -71,6 +66,7 @@ html, body {
 </style>
 
 
+<div id='calendar'></div>
 
 <!--Add event modal-->
 <div id="createEventModal" class="modal fade">
@@ -96,7 +92,7 @@ html, body {
 						<textarea class="form-control" id="task_desc" name="task_desc"
 							rows="4" placeholder="Description"></textarea>
 					</div>
-					<div class="row">
+					<div class="row col-sm-12">
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="starts_at">Starts at</label> <input
@@ -114,7 +110,7 @@ html, body {
 						</div>
 					</div>
 
-					<div class="row">
+					<div class="row col-sm-12">
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="station_id"> Station ID:</label> <select
@@ -157,7 +153,7 @@ html, body {
 						</div>
 					</div>
 
-					<div class="row">
+					<div class="row col-sm-12">
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="station_id"> Project:</label> <select
@@ -186,20 +182,34 @@ html, body {
 									<option value="notset" selected="selected"></option>
                                 <?php
                                 require ('../config/db.php');
-                                $query3 = "select * from check_list";
+                                $query3 = "select * from checklist_template";
                                 $result3 = mysqli_query($con, $query3) or die(mysqli_error($con));
                                 while ($row = mysqli_fetch_array($result3)) {
                                     ?>
                                 
                                 <option
-										value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></option>
+										value="<?php echo $row['id']; ?>"><?php echo $row['template_name']; ?></option>
                                 
                                 <?php }?>
                               </select>
 							</div>
 						</div>
 					</div>
-
+					<div class="row col-sm-12">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="status"> Status:</label> <select
+									class="form-control" id="status" name="status"
+									required="required">
+									<option value="not_started" selected="selected">Not started</option>
+									<option value="todo">To do</option>
+									<option value="missed">Missed</option>
+									<option value="completed">Completed</option>
+									<option value="approved">approved</option>
+								</select>
+							</div>
+						</div>
+					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -329,20 +339,34 @@ html, body {
 									<option value="notset" selected="selected"></option>
                                 <?php
                                 require ('../config/db.php');
-                                $query3 = "select * from check_list";
+                                $query3 = "select * from checklist_template";
                                 $result3 = mysqli_query($con, $query3) or die(mysqli_error($con));
                                 while ($row = mysqli_fetch_array($result3)) {
                                     ?>
                                 
                                 <option
-										value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></option>
+										value="<?php echo $row['id']; ?>"><?php echo $row['template_name']; ?></option>
                                 
                                 <?php }?>
                               </select>
 							</div>
 						</div>
 					</div>
-
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="status"> Status:</label> <select
+									class="form-control" id="status" name="status"
+									required="required">
+									<option value="not_started" selected="selected">Not started</option>
+									<option value="todo">To do</option>
+									<option value="missed">Missed</option>
+									<option value="completed">Completed</option>
+									<option value="approved">approved</option>
+								</select>
+							</div>
+						</div>
+					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -385,9 +409,7 @@ html, body {
 
 
 
-
-
-
+<?php include '../doc/footer.php'; ?>
 
 
 <script>
@@ -412,9 +434,6 @@ $(function() {
 
 	  
 	});
-
-
-
 
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
