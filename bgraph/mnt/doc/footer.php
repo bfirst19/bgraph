@@ -35,15 +35,20 @@
 	<script type="text/javascript"  src="../js/bootstrap.min.js"></script>
 
 <script src="../js/flatpickr.js"></script>
-<script src="../js/angular.min.js"></script>
+<script src="../js/excel-bootstrap-table-filter-bundle.js"></script>
 
 
 <!-- moment js -->
 <script src='../js/moment.min.js'></script>
 <script src='../js/moment-with-locales.js'></script>
 
+<script src='../js/jspdf.min.js'></script>
+<script src='../js/html2canvas.js'></script>
 
-	
+<script src='../js/html2pdf.bundle.js'></script>
+<script src="../js/es6-promise.auto.min.js"></script>
+
+<script src="../js/addHTML.js"></script>
 	
  <script type="text/javascript" src="../js/select2.min.js"></script>
   <!-- Core plugin JavaScript-->

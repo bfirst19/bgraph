@@ -17,7 +17,7 @@ if (isset($_POST['template_name'])){
     $create_date = date("Y-m-d H:i:s");
     $qry = "INSERT INTO `checklist_template` (`id`, `template_name`, `stations_id`, `template_content`, `created_by`, `create_date`) VALUES (NULL, '$name', '23','$jsondata','$created_by', '$create_date')";
     //echo $jsondata;
-    $result = mysqli_query($con,$query);
+    //$result = mysqli_query($con,$query);
     if($con->query($qry) === TRUE) {
         echo "Record created successfully";
     } else {

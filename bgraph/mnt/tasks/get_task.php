@@ -9,6 +9,8 @@ $requestData = $_REQUEST;
 
 $id = $_POST['id'];
 
+
+
 $query  = "select * from tasks where id ='$id'";
 $result = mysqli_query($con,$query) or die(mysqli_error($con));
 
@@ -24,7 +26,7 @@ while ($row = mysqli_fetch_array($result)) {  // preparing an array
         'station_id' => $row["stations_id"],
         'assigned_to' => $row["assigned_to"],
         'project_id' => $row["projects_id"],
-        'checklist_id' => $row["check_list_id"],
+        'checklist_id' => $row["checklist_id"],
         'allDay' => ''
     );
     array_push($events, $e);

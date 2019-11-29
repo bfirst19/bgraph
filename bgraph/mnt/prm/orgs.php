@@ -7,7 +7,6 @@
 </table>
 
 
-
 <?php include '../doc/footer.php'; ?>
 
 
@@ -140,7 +139,7 @@ $(document).ready( function() {
           }			  
 		    
 		});
-	
+	 
 	} );
 
 

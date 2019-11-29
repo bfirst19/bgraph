@@ -18,9 +18,13 @@
 							id="template_name" name="template_name" type="text"
 							placeholder="Template Name" required="required">
 					</div>
-		<button class="btn btn-secondary" tabindex="0"
+		<button class="btn btn-primary" tabindex="0"
 			aria-controls="#builder" type="button" onclick="saveForm();">
-			<span><i class="fas fa-plus-circle">Save Form</i></span>
+			<span><i class="fas fa-save">Save</i></span>
+		</button>
+		<button class="btn btn-primary" tabindex="0"
+			aria-controls="#builder" type="button" onclick="location.reload(true);">
+			<span><i class="fas fa-plus-circle">New</i></span>
 		</button>
 	</div>
 </div>
@@ -64,20 +68,19 @@ var jsonElement = document.getElementById('json');
     			      }
     			    },    			    
     			  },
-    			  editForm: {
+    			  editForm: {    				  
     			    textfield: [
-    			      {
-    			        key: 'api',
-    			        ignore: true
-    			      }        
-    			    ]
+      			      {
+      			        key: 'api',
+      			        ignore: true
+      			      }        
+      			    ]            		
     			  }
     			}).then(function(builder) {
     			  builder.on('saveComponent', function() {
     				 console.log("build component:"+builder.schema);
     			    console.log(builder.schema);
-    			    console.log(JSON.stringify(builder.schema));
-    			    
+    			    console.log(JSON.stringify(builder.schema));    			    
     			    jsonElement.innerHTML = '';
     			   
     			    jsonElement.appendChild(document.createTextNode(JSON.stringify(builder.schema, null, 4)));
@@ -93,14 +96,18 @@ var jsonElement = document.getElementById('json');
     		 var tempName = $("#template_name").val();
 
     		 var content = jsonElement.innerHTML;
-    		 if(content == ""){
-        		 swal("Cannot save empty form");
-    		 }
     		 
     		 if(tempName ==""){
-        		 swal ("Enter template name");
+        		 alert ("Enter template name");
         		 return null;
     		 }
+    		 
+    		 if(content == ""){
+        		 alert("Cannot save empty form");
+        		 return null;
+    		 }
+    		 
+    		
     		
     		 $.ajax({
 	                 type:'POST',
@@ -112,11 +119,12 @@ var jsonElement = document.getElementById('json');
 	      					  text: resp,
 	      					  icon: "info",
 	      					});	
-	                   
+	      				 
 	      			},
 	        		 error: "Error"	        		
 
 	                 });
+    		 
    		}
        
     </script>

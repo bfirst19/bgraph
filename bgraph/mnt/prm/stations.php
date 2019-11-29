@@ -11,6 +11,15 @@
 
 </table>
 
+<div style="background-color: rgba(0, 0, 255, .1);margin:15px;">
+	<h6 align="left">Station types</h6>
+</div>
+
+<table id="stationtype_table_id" class="table table-striped table-bordered"
+	style="width: 100%">
+
+</table>
+
 <div class="modal fade" id="file_upload_modal" tabindex="-1"
 	role="dialog">
 	<div class="modal-dialog">
@@ -205,12 +214,6 @@ var columnDefs = [{
               action: function ( e, dt, node, config ) {
                   loadFromCsv();
               }
-          },{
-              text: "<i class='fa fa-plus-circle' aria-hidden='true'>Create Station Type</i>",
-              className:'btn btn-secondary',
-              action: function ( e, dt, node, config ) {
-            	  createStType();            	  
-              }
           }//,"copy","excel","pdf",""print"
           ],
           onAddRow: function(datatable, rowdata, success, error) {
@@ -286,30 +289,108 @@ var columnDefs = [{
 			 $(selector).modal('show');
 		}
 
-		function createStType(){
-			swal("Enter station type:", {
-      		  content: "input",
-      		})
-      		.then((value) => {
-      			 $.ajax({
- 	                 type:'POST',
- 	                 url:'./addType',
- 	                 data:{'type':value},
- 	                 success: function(resp){
- 	 	                 console.log(resp);
- 	 	   			var table = $('#stations_table_id').DataTable();				
- 	 	   			table.ajax.reload();
- 	 	   			
- 	                 },
- 	        		 error: function(resp){
- 	 	                 console.log(resp);
- 	                 }	        		
+		
 
- 	                 });
-      		});
 
-		}
-	
+		var columnDefs2 = [{
+		    title: "",
+		    id:"",
+		    type:"hidden"
+		  },{
+		    title: "Id",
+		    name:"id",		       
+		  }, {
+		    title: "Station type",
+		    name:"type_value"
+		  }];
+
+		 var table = $('#stationtype_table_id').DataTable({		  
+			  "dom": '<"dt-buttons"lr><"clear">fBtip',
+			  "responsive": true,
+	          "processing": true,
+	          "serverSide": false,
+	           altEditor: true,	         
+	          "ajax": {
+	              url: "./stypes", // json datasource
+	              //data: {action: 'getEMP'},  Set the POST variable  array and adds action: getEMP
+	              type: 'get',  // method  , by default get
+	          },
+	          columns: columnDefs2,
+	          columnDefs: [ {
+	              orderable: false,
+	              className: 'select-checkbox',
+	              targets:   0
+	          }],
+	          select: {
+	              style:    'os',
+	              selector: 'td:first-child'
+	          },
+	          order: [[ 1, 'asc' ]],
+	          buttons:[{
+	              text: "<i class='fa fa-plus-circle' aria-hidden='true'>Create Station Type</i>",
+	              className:'btn btn-secondary',
+	              action: function ( e, dt, node, config ) {
+	            	  createStType();            	  
+	              }
+	          },
+	          {
+	              extend: 'selected', 
+	              text: "<i class='fas fa-minus-circle'>Delete</i>",
+	              name: 'delete'      
+	          }],
+	          
+	          onDeleteRow: function(datatable, rowdata, success, error) { 
+
+	        	  swal({
+	        		  title: "Are you sure?",
+	        		  text: "Are you sure want to delete the station?",
+	        		  icon: "warning",
+	        		  buttons: true,
+	        		  dangerMode: true,
+	        		})
+	        		.then((willDelete) => {
+	        		  if (willDelete) {
+	        			  $.ajax({
+	     	                 type:'POST',
+	     	                 url:'./deleteType',
+	     	                 data:rowdata,
+	     	                 success: success,
+	     	        		 error: error	        		
+
+	     	                 });	
+	        		  } else {
+	        		    swal("Station not deleted");
+	        		  }
+	        		});
+	      		     
+	        	  
+	          },
+		 });
+
+		 function createStType(){
+				swal("Enter station type:", {
+	      		  content: "input",
+	      		})
+	      		.then((value) => {
+	      			 $.ajax({
+	 	                 type:'POST',
+	 	                 url:'./addType',
+	 	                 data:{'type':value},
+	 	                 success: function(resp){
+	 	 	             console.log(resp);
+	 	 	   			var table = $('#stationtype_table_id').DataTable();				
+	 	 	   			table.ajax.reload();
+	 	 	   			
+	 	                 },
+	 	        		 error: function(resp){
+	 	 	                 console.log(resp);
+	 	                 }	        		
+
+	 	                 });
+	      		});
+
+			}
+		  
 	} );
 
 </script>

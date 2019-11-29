@@ -1,11 +1,12 @@
 <?php
 require ('../config/db.php');
 session_start();
+
 if (isset($_POST['type'])) {
     $type = stripslashes($_POST['type']);
     $type = mysqli_real_escape_string($con, $type);
-    // echo $music_number;
-    if ($empty($type)) {
+ 
+    if (!empty($type)) {
         $sql = "INSERT INTO `station_type` (`id`, `type_value`) VALUES (NULL, '$type')";
         // $result=mysqli_query($con,$qry);
         if ($con->query($sql) === TRUE) {
