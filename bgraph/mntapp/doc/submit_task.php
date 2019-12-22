@@ -18,6 +18,11 @@ if (isset($_POST['completedData'])){
     $project_manager = stripslashes($_POST['project_manager']);
     $project_manager = mysqli_real_escape_string($con, $project_manager);
     
+    $task_name = stripslashes($_POST['task_name']);
+    $task_name = mysqli_real_escape_string($con, $task_name);
+    
+    
+    
     $prep_stmt = "SELECT * from mnt_report WHERE checklist_id='$checklist_id'";
     // execute query
     $result = mysqli_query($con, $prep_stmt) or die(mysqli_error($con));
@@ -27,7 +32,7 @@ if (isset($_POST['completedData'])){
     
     if($count==0){
     $qry = "INSERT INTO `mnt_report` (`id`, `name`, `json`, `html`, `pdf`, `docx`, `maintenance_date`,`before_image`,`after_image`, `checklist_id`) 
-            VALUES (NULL, NULL,'$jsondata',NULL,NULL,NULL,'$maint_date','NULL','NULL','$checklist_id')";
+            VALUES (NULL, '$task_name','$jsondata',NULL,NULL,NULL,'$maint_date',NULL,NULL,'$checklist_id')";
     }else {
         $qry="UPDATE `mnt_report` SET `json`='$jsondata' WHERE `checklist_id`='$checklist_id'"; 
     }

@@ -38,7 +38,7 @@ viewport {
 	href="../favicon/animated_favicon1.gif">
 
 
-<title>Bluegrap Admin - Dashboard</title>
+<title>Blugraph Admin - Dashboard</title>
 
 <!-- bootstrap  -->
 <!-- link href="../css/bootstrap.min.css"
@@ -72,7 +72,7 @@ viewport {
 
 
 
-
+<link href="../css/datepicker.css" rel="stylesheet">
 <!-- Custom styles for this template-->
 <link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/bg-admin.css" rel="stylesheet">
@@ -95,10 +95,10 @@ viewport {
 
 	<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-		<a class="navbar-brand mr-1" href="../doc/dashboard">Bluegraph</a>
+		<a class="navbar-brand mr-1" href="../doc/dashboard">Blugraph</a>
 
 
-		<button class="btn btn-link btn-sm text-dark order-1 order-sm-0"
+		<button class="btn btn-link btn-sm text-light order-1 order-sm-0"
 			id="sidebarToggle" href="#">
 			<i class="fas fa-bars"></i>
 		</button>
@@ -124,9 +124,7 @@ echo $_SESSION['username'];
 
 		<ul class="navbar-nav ml-auto">
 
-			<li><a class="btn btn-outline-info" href="#" data-toggle="modal"
-				data-target="#logoutModal">Sign out<i
-					class="dropdown-item-icon ti-power-off"></i></a></li>
+			<li><a class="btn btn-outline-info" href="../access/login">Sign out</a></li>
 		</ul>
 
 	</nav>

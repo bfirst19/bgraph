@@ -46,7 +46,7 @@ if(!empty($_FILES['pdf'])){
     
     // update mnt_report
     $qry = "UPDATE `mnt_report` SET `html`='$doc2Html',`pdf`='$filepath' WHERE `checklist_id`='$checklist_id'";
-    if ($con->query($qry) === TRUE) {
+       if ($con->query($qry) === TRUE) {
         echo "Record approved successfully";
     } else {
         echo "Error adding record:" . $con->error;        

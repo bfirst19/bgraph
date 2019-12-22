@@ -106,7 +106,7 @@ $(document).ready( function() {
     	            dt.ajax.reload(null, false);
     	        }
     	    },       	 		
-           "copy","excel","pdf","print"
+           //"copy","excel","pdf","print"
            ],
 
 	 });

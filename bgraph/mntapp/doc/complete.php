@@ -65,6 +65,7 @@ $row = mysqli_fetch_assoc($result);
 $st_id = $row["stations_id"];
 $status = $row["status"];
 $maint_date=$row["start_date"];
+$task_name=$row["name"];
 
 $query_st = "select * from stations where station_id ='$st_id'";
 $result_st = mysqli_query($con, $query_st) or die(mysqli_error($con));
@@ -266,6 +267,7 @@ var json = <?php echo $checklist_content;?>;
 		
 var maint_date = "<?php echo $maint_date;?>";
 var status ="<?php echo $status;?>";
+var task_name="<?php echo $task_name;?>";
 var render = false;
 console.log(status);
 if(status =="Completed"){
@@ -310,25 +312,14 @@ if(status =="Completed"){
 			      $.ajax({
 						type: "POST",
 						url: "./submit_task",				
-						data: {"completedData":JSON.stringify(finalComp),"checklist_id":checklist_id,"maint_date":maint_date,"project_manager":project_manager,"task_id":task_id},
+						data: {"completedData":JSON.stringify(finalComp),"checklist_id":checklist_id,
+								"maint_date":maint_date,"project_manager":project_manager,"task_id":task_id,
+								"task_name":task_name								
+								},
 						success: function(res){
 						console.log("approved task."+res);	
 						//location.reload(true);	
 						parent.history.back();	
-						if(res.indexOf('Error')!=-1){
-							swal({
-							  title: "Error",
-							  text: res,
-							  icon: "error",
-							});	
-							}else{
-								swal({
-									  title: "Error",
-									  text: res,
-									  icon: "error",
-									});	
-							}	
-			            
 						},error: function(resp){
 							console.log("Error");
 							console.log(resp);

@@ -641,6 +641,7 @@ $(document).ready( function() {
 		           type: 'POST',
 		           success: function (response) {
 		             //alert('Exit to send request');
+		        	   parent.history.back();
 		           },
 		           error: function (jqXHR) {
 		        	  // alert('Failure to send request');
