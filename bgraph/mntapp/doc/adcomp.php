@@ -25,14 +25,14 @@ $row = mysqli_fetch_assoc($result);
 
 $st_id = $row["stations_id"];
 $status = $row['status'];
-$task_name=$row['name'];
-$main_time=$row['start_date'];
+$task_name = $row['name'];
+$main_time = $row['start_date'];
 
 $query_st = "select * from stations where station_id ='$st_id'";
 $result_st = mysqli_query($con, $query_st) or die(mysqli_error($con));
 $row_st = mysqli_fetch_assoc($result_st);
 
-$st_name=$row_st['name'];
+$st_name = $row_st['name'];
 ?>
 
 <style>
@@ -110,11 +110,26 @@ hr.style2 {
 	font-size: 14px;
 }
 
-p {
-	margin-top: 0;
-	margin-bottom: 1rem;
-	font-size: 14px;
+.tabcontent {
+	display: none;
+	padding: 6px 12px;
+	border: 1px solid #ccc;
+	border-top: none;
 }
+
+.column {
+  float: left;
+  width: 100%;
+  padding: 10px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
 </style>
 
 <div>
@@ -132,27 +147,50 @@ if (strcmp($status, "Completed") != 0) {
     ?>
 	
 	<div class="pull-right">
-		<button class="btn btn-info btn-rounded" tabindex="0"
-			aria-controls="#builder" type="button" name="approveTask"
-			id="approveTask">
+		<button class="btn buttons-selected btn-success btn-sm mr-1"
+			tabindex="0" aria-controls="#builder" type="button"
+			name="approveTask" id="approveTask">
 			<span class="fas">Approve</span>
 		</button>
-		<button class="btn btn-danger btn-rounded" tabindex="0"
-			aria-controls="#builder" type="button" name="rejectTask"
+		<button class="btn buttons-selected btn-danger btn-sm mr-1"
+			tabindex="0" aria-controls="#builder" type="button" name="rejectTask"
 			id="rejectTask">
 			<span class="fas">Reject</span>
 		</button>
+		<button class="btn buttons-selected btn-danger btn-sm mr-1"
+			tabindex="0" aria-controls="#builder" type="button" name="editReport"
+			id="editReport">
+			<span><i class="fas fa-edit">Edit</i></span>
+		</button>
+
+		<button class="btn buttons-selected btn-primary btn-sm mr-1"
+			tabindex="0" aria-controls="#builder" type="button" name="saveReport"
+			id="saveReport">
+			<span><i class="fas fa-check">Save</i></span>
+		</button>
+
 	</div>
 	<?php
 } else {
     ?>
 <div class="pull-right">
-		<button class="btn btn-info btn-rounded" tabindex="0"
+		<button class="btn btn-success btn-sm mr-1" tabindex="0"
 			aria-controls="#builder" type="button" name="printReport"
 			id="printReport">
-			<span class="fas">Print</span>
+			<span><i class="fas fa-print">Print</i></span>
 		</button>
-		
+
+		<button class="btn buttons-selected btn-danger btn-sm mr-1"
+			tabindex="0" aria-controls="#builder" type="button" name="editReport"
+			id="editReport">
+			<span><i class="fas fa-edit">Edit</i></span>
+		</button>
+		<button class="btn buttons-selected btn-primary btn-sm mr-1"
+			tabindex="0" aria-controls="#builder" type="button" name="saveReport"
+			id="saveReport">
+			<span><i class="fas fa-check">Save</i></span>
+		</button>
+
 	</div>
 <?php
 }
@@ -177,11 +215,12 @@ $src = 'data: ' . mime_content_type($image) . ';base64,' . $imageData;
 
 	<div id="row1" class="row">
 		<div class="col-md-4" align="left">
-					<img alt="logo" src="../assets/images/logo.png">				
-			</div>
+			<?php echo '<img src="data:image/gif;base64,' . $imageData . '" />';?>
+		</div>
 		<div class="col-md-8" align="right">
 			<section>
-				<h1 style="color: #1872c8;padding:12px;">BluGraph Technologies Pte Ltd</h1>
+				<h1 style="color: #1872c8; padding: 12px;">BluGraph Technologies Pte
+					Ltd</h1>
 				<h4>7 Gambas Crescent</h4>
 				<h4>#09-24 Ark@ Gambas</h4>
 				<h4>Singapore 757087</h4>
@@ -226,6 +265,10 @@ $src = 'data: ' . mime_content_type($image) . ';base64,' . $imageData;
 	
 <?php
 $checklist_content;
+$checklist_content_html;
+$remarks;
+$bforeImage;
+$afterImage;
 if (isset($_GET['id'])) {
     $id = stripslashes($_GET['id']);
     $id = mysqli_real_escape_string($con, $id);
@@ -236,6 +279,10 @@ if (isset($_GET['id'])) {
     $result2 = mysqli_query($con, $qry2) or die(mysqli_error($con));
     $row2 = mysqli_fetch_assoc($result2);
     $str = $row2["json"];
+    $checklist_content_html = $row2["html"];
+    $bforeImage = $row2["before_image"];
+    $afterImage = $row2["after_image"];
+
     // echo json_encode($checklist_content);
     // exit();
 
@@ -250,21 +297,21 @@ if (isset($_GET['id'])) {
 
     // Convert JSON string to Object
 
-    $someObject = json_decode($str);
+    // $someObject = json_decode($str);
 
     // print_r($someObject); // Dump all data of the Object
 
     // echo $someObject[0]->name; // Access Object data
 
-    foreach ($someArray as $key => $value) {
+    // foreach ($someArray as $key => $value) {
 
-        // echo $value["legend"] . ", " . $value["components"] . "<br>";
-    }
+    // echo $value["legend"] . ", " . $value["components"] . "<br>";
+    // }
 
     // $temp = "<div class='panel panel-default' style='padding: 10px;'>";
     // $temp .= "<div class='panel-body'><fieldset class='col-md-12'><legend>Checklist</legend>";
     $temp .= "<div class='table-responsive-sm'>";
-    $temp .= "<table class='table table-bordered table-sm' id='checklist_table_id'>";
+    $temp .= "<table class='table table-bordered table-sm table-editable' id='checklist_table_id'>";
     $temp .= "<thead class='thead-light'>";
     $temp .= "<th>S.No</th>";
 
@@ -278,36 +325,65 @@ if (isset($_GET['id'])) {
         $rowdata = $someArray[$i];
 
         $els = sizeof($rowdata["components"]);
-        $rc = $i + 1;
 
-        for ($j = 0; $j < sizeof($rowdata["components"]); $j ++) {
-
-            $temp .= "<tr>";
-
-            if ($j == 0) {
-
-                $temp .= "<td rowspan=" . (int) $els . ">" . $rc . "</td>";
-
-                $temp .= "<td rowspan=" . (int) $els . ">" . $rowdata["legend"] . "</td>";
-            }
-
-            $temp .= "<td>" . $rowdata["components"][$j]["description"] . "</td>";
-
-            $temp .= "<td>" . $rowdata["components"][$j]["currentValue"] . "</td>";
+        if (strcmp($rowdata["legend"], "Remarks") != 0) {
+            $remarks = $rowdata["currentValue"];
+            $remarks = 'Testing';
         }
 
-        $temp .= "</tr>";
+        if (strcmp($rowdata["legend"], "Remarks") != 0 || strpos($rowdata["legend"], 'Maintenance') !== true) {
+            $rc = $i + 1;
+
+            if (sizeof($rowdata["components"]) > 0) {
+                for ($j = 0; $j < sizeof($rowdata["components"]); $j ++) {
+
+                    $temp .= "<tr>";
+
+                    if ($j == 0) {
+
+                        $temp .= "<td rowspan=" . (int) $els . ">" . $rc . "</td>";
+
+                        $temp .= "<td rowspan=" . (int) $els . ">" . $rowdata["legend"] . "</td>";
+                    }
+
+                    $temp .= "<td>" . $rowdata["components"][$j]["description"] . "</td>";
+
+                    $temp .= "<td>" . $rowdata["components"][$j]["currentValue"] . "</td>";
+                }
+
+                $temp .= "</tr>";
+            }
+        }
     }
 
     /* End tag of table */
 
+    /*
+     * $temp .= "<tr>";
+     * $temp .= "<td colspan=1>" . "Remarks" . "</td>";
+     * $temp .= "<td colspan=3>" . $remarks . "</td>";
+     * $temp .= "</tr >";
+     */
+
     $temp .= "</table>";
     $temp .= "</div>";
+
     // $temp .= "</fieldset></div></div>";
 
     /* Printing temp variable which holds table */
 
-    echo $temp;
+    if (empty($checklist_content_html)) {
+        echo $temp;
+    } else {
+
+        $oldtemp .= "<div class='table-responsive-sm'>";
+        $oldtemp .= "<table class='table table-bordered table-sm table-editable' id='checklist_table_id'>";
+        $oldtemp .= $checklist_content_html;
+        $oldtemp .= "</table>";
+        $oldtemp .= "</div>";
+
+        echo $oldtemp;
+    }
 }
 ?>
 
@@ -326,16 +402,46 @@ $user2 = $usr2["first_name"] . ' ' . $usr2["last_name"];
 
 ?>
 </div>
+		<br>
 		<div id="container14">
-			Remarks: <br>
-			<hr>
-			<hr>
+			Remarks:
+			<p contenteditable="false" id="remarks_report"><?php echo $remarks;?></p>
+			<br> <br>
 		</div>
+<?php
+// Read image path, convert to base64 encoding
+		
+if(isset($bforeImage) && !empty($bforeImage)) {
+	$bfImageData = base64_encode(file_get_contents($bforeImage));
+}
+if(isset($afterImage)  && !empty($afterImage)) {
+	$afImageData = base64_encode(file_get_contents($afterImage));
+}
+?>
+		<div id="report_image" class="row">
+			<div class="column" id="bfImageData">	
+				<?php 
+						if(isset($bfImageData)  && !empty($bfImageData)) {
+							echo '<img src="data:image/gif;base64,' . $bfImageData . '" alt="Before Maintenance:" height="80%" width="80%" />';
+						}
+						
+				?>
+		</div>
+			<div class="column" id="afImageData">
+				<?php 
+						if(isset($afImageData)  && !empty($afImageData)) {
+							echo '<img src="data:image/gif;base64,' . $afImageData . '" alt="After Maintenance:" height="80%" width="80%" />';
+						}
+				
+				?>
+			</div>
+		</div>
+		<br>
+		<br><br>
 		<div id="container15">
 			<div id="row2" class="row col-md-12">
 				<div id="mainTeam" class="col-md-6" align="left">
 					<p>Maintenance Team</p>
-					<br>
 					<p style="">
 						Name:<?php echo $user1; ?>
 					</p>
@@ -343,7 +449,6 @@ $user2 = $usr2["first_name"] . ' ' . $usr2["last_name"];
 
 				<div id="verifyTeam" class="col-md-6" align="left">
 					<p>Verified By</p>
-					<br>
 					<p style="">
 						Name: <?php echo $user2; ?>
 					</p>
@@ -371,11 +476,15 @@ $user2 = $usr2["first_name"] . ' ' . $usr2["last_name"];
 <script type="text/javascript" src="../js/canvasjs.min.js"></script>
 <script type="text/javascript" src="../js/jquery.fileDownload.js"></script>
 
-<?php 
+<?php
 $milliseconds = round(microtime(true) * 1000);
-$fname =$milliseconds.'_'.$id.'.pdf';
+$fname = $milliseconds . '_' . $id . '.pdf';
 
 ?>
+
+
+
+
 <script>
 
 $(document).ready( function() {
@@ -394,7 +503,12 @@ $(document).ready( function() {
 		var val = htmlToPdfmake(doc2Html);
 
 		var table =  $("#container12").html();
-		var tableContent = htmlToPdfmake(table);		
+		var tableContent = htmlToPdfmake(table);
+
+		
+		
+		var remarksContent = $("#remarks_report")[0].innerText;	
+		console.log(remarksContent);
 	
 		var pageOrientation;
 
@@ -406,7 +520,18 @@ $(document).ready( function() {
 			        text:'<?php echo $task_name;?>'
 			        
 			    },
-			     {canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595-2*40, y2: 5, lineWidth: 0.5 }]},
+			    {
+				       "canvas":[
+				         {
+				            "type":"line",
+				            "x1":0,
+				            "y1":5,
+				            "x2":515,
+				            "y2":5,
+				            "lineWidth":0.5
+				         }
+				      ]
+				   },
 			    {
 			      margin : [ 20, 10, 20,5],
 			      fontSize : 8,
@@ -441,37 +566,19 @@ $(document).ready( function() {
 		
 		var dc =[
 			   //comment remarks
+			   {canvas: [{ type: 'line', x1: 0, y1: 15, x2: 595-2*40, y2: 15, lineWidth: 0.5 }]},
 			   {
 			            margin:[20,10,10,10],
 			            "width":"*",
 			            "text":"Remarks:",
-			            fontSize:8,
+			            fontSize:9,
 			            bold:true
 			   },
 			   {
-			       "canvas":[
-			         {
-			            "type":"line",
-			            "x1":0,
-			            "y1":5,
-			            "x2":515,
-			            "y2":5,
-			            "lineWidth":0.5
-			         }
-			      ]
-			   },
-			   {
-			       "canvas":[
-			         {
-			            "type":"line",
-			            "x1":0,
-			            "y1":20,
-			            "x2":515,
-			            "y2":20,
-			            "lineWidth":0.5
-			         }
-			      ]
-			   },
+				   width: '*',
+			       text: remarksContent,
+			       fontSize:8,
+			   },			   
 			   {
 			      "margin":[20,30,20,5],
 			      "fontSize":8,
@@ -586,7 +693,7 @@ $(document).ready( function() {
 			    			bold: false
 			    		},
 			    		'table': {
-			    			widths: ['*'],
+			    			widths: [ 200, 200, 100, 150 ],
 			    			margin: [0, 5, 10, 0],
 			    			fontSize: 8,
 			    			bold: false
@@ -600,6 +707,7 @@ $(document).ready( function() {
 			    	}	
 				    	
 			};
+		console.log(docDefinition);
 
 		return docDefinition;
 		
@@ -658,6 +766,7 @@ $(document).ready( function() {
                 
 			//save as pdf
         	printmpdf();
+        	
         
       /* $.ajax({
 			type: "POST",
@@ -741,6 +850,35 @@ $(document).ready( function() {
     	                   
 		                          	
    });
+
+
+	$('#editReport').on('click', function(e){
+    	e.preventDefault();
+    	$('#checklist_table_id').prop('contenteditable', true);
+    	
+    	 	            	
+	});
+
+	$('#saveReport').on('click', async function(e){
+		e.preventDefault();
+    	$('#checklist_table_id').prop('contenteditable', false);
+
+    	var eTable = $('#checklist_table_id').html();
+    	
+    	$.ajax({
+				type: "POST",
+				url: "./task_actions",				
+				data: {"action":"updateReport","task_id":task_id,"checklist_id":checklist_id,"html2Doc":eTable},
+				success: function(res){
+					console.log("approved task."+res);
+				},error: function(resp){
+					console.log("Error");
+					console.log(resp);
+				}
+			});
+		
+    	 	            	
+	});
 
 
 });

@@ -87,7 +87,7 @@ var columnDefs = [{
    {
 		title: "Password",
 		name:"password",
-		type:"hidden"
+		type:"password"
    },
    {
     title: "Role",

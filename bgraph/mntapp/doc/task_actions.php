@@ -18,9 +18,13 @@ if (isset($_POST['task_id'])) {
 
     $doc2Html = stripslashes($_POST['doc2Html']);
 
-    echo $project_manager;
+    $html_table = stripslashes($_POST['html2Doc']);
+    $html_table = mysqli_real_escape_string($con, $html_table);
+    
+  
 
     $action = stripslashes($_POST['action']);
+    
     if (strcmp($action, "approveTask") == 0) {
         changeTaskApproved($con, $task_id, "Completed", $comment, $checklist_id, $doc2Html);
     } elseif (strcmp($action, "rejectTask") == 0) {
@@ -28,7 +32,33 @@ if (isset($_POST['task_id'])) {
     } elseif (strcmp($action, "completeTask") == 0) {
         // changeTaskStatus($con,$task_id, "For Approval",$comment);
         changeApprover($con, $task_id, "For Approval", $comment, $project_manager, $checklist_id);
+    }elseif (strcmp($action, "updateReport") == 0) {
+        echo "inside report-------------";
+        // changeTaskStatus($con,$task_id, "For Approval",$comment);
+        $qry = "UPDATE `mnt_report` SET `html`='$html_table' WHERE `checklist_id`='$checklist_id'";
+        
+        if ($con->query($qry) === TRUE) {
+            echo "Record approved successfully";
+        } else {
+            echo "Error adding record:" . $con->error;
+        }
     }
+    
+   
+}
+
+
+
+function updateMntReport($con, $task_id,  $project_manager, $checklist_id,$html_table){
+    echo "inside report-------------";
+    $qry = "UPDATE `mnt_report` SET `html`='koooooooooooooooo' WHERE `checklist_id`='$checklist_id'";
+    if ($con->query($qry) === TRUE) {
+        echo "Record saved successfully";
+    } else {
+        echo "Error saving record:" . $con->error;
+        
+    }
+    return 'hi';
 }
 
 /**

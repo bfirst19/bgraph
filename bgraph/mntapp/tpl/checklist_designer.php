@@ -83,12 +83,10 @@ var jsonElement = document.getElementById('json');
         			    fieldset:true,
     			        textfield: true,
     			        textarea: true,
-    			        //phoneNumber: true,
     			        datetime:true,
-    			        //checkbox:true,
     			        selectboxes:true,
     			        radio:true,
-    			        signature:true,
+    			        //signature:true,
     			        file:true
     			        
     			      }
@@ -120,6 +118,7 @@ var jsonElement = document.getElementById('json');
         	 console.log('return to save:');                	
     		 console.log(jsonElement.innerHTML);
     		 var tempName = $("#template_name").val();
+    		 var st_type = $("#station_type").val();
 
     		 var content = jsonElement.innerHTML;
     		 
@@ -138,7 +137,7 @@ var jsonElement = document.getElementById('json');
     		 $.ajax({
 	                 type:'POST',
 	                 url:'./create',	                
-	                 data:{jsonData:jsonElement.innerHTML,template_name:tempName},
+	                 data:{jsonData:jsonElement.innerHTML,template_name:tempName,stationType:st_type},
 	                 success: function(resp){ 			
 	      				swal({
 	      					  title: "Info",

@@ -2,10 +2,35 @@
 
 
 
-<div style="background-color: rgba(0,0,255,.1)" ><h6 align="left">Project List</h6></div>
-<table id="projects_table_id" class="table table-striped table-bordered" style="width:100%">
-    
+<div style="background-color: rgba(0, 0, 255, .1)">
+	<h6 align="left">Project List</h6>
+</div>
+<table id="projects_table_id" class="table table-striped table-bordered"
+	style="width: 100%">
 </table>
+
+<div class="modal fade" id="altViewer-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="calendarModalLabel">Project Details</h5>
+
+				<div>
+					<button class="btn btn-info btn-sm mr-1 " type="button"
+						data-dismiss="modal" aria-label="Close">
+						<i class="fas fa-window-close"></i>
+					</button>
+				</div>
+
+			</div>
+			<div class="modal-body">
+				<p></p>
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+	</div>
+</div>
+
 <?php include '../doc/footer.php'; ?>
 
 <script type="text/javascript">
@@ -76,6 +101,12 @@ $(document).ready( function() {
           buttons: [{
         	  className: 'btn-success btn-sm mr-1',
               text: "<i class='fas fa-plus-info'>View</i>",
+              action: function ( e, dt, node, config ) {
+   	        	 e.preventDefault();
+   	        	var row = dt.rows( { selected: true } ).data();     	        		        	
+   	        	//return '<a class="btn btn-info btn-sm dt-view" href=./complete?id=' + row[0][1] + '>' + 'View' + '</a>';
+   	        	openDetailsModal(row);
+   	        },
               name: 'view'        
           }
           ],//,"copy","excel","pdf",""print"],
@@ -146,7 +177,54 @@ $(document).ready( function() {
           }
 		    
 		});
-	
+
+		function openDetailsModal(row){
+			//var table = $('#projects_table_id').DataTable();
+			var columnDefs = table.init().columns;
+
+			var dt = table;
+			var adata = dt.rows({
+				selected : true
+			});
+			
+			 var data = "";
+
+				data += "<form name='altEditor-form' role='form'>";
+				for (j = 0; j < columnDefs.length; j++) {
+					if (columnDefs[j].type && columnDefs[j].type
+							.indexOf("hidden") >= 0) {
+						data += "<input type='hidden' id='"
+								+ columnDefs[j].title
+								+ "' value='"
+								+ adata.data()[0][j]
+								+ "'></input>";
+					} else {
+						data += "<div style='margin-left: initial;margin-right: initial;' class='form-group row'><label for='"
+								+ columnDefs[j].name
+								+ "'>"
+								+ columnDefs[j].title
+								+ ":&nbsp</label> <input  type='hidden'  id='"
+								+ columnDefs[j].title
+								+ "' name='"
+								+ columnDefs[j].title
+								+ "' placeholder='"
+								+ columnDefs[j].title
+								+ "' style='overflow:hidden'  class='form-control' value='"
+								+ adata.data()[0][j]
+								+ "' >"
+								+ adata.data()[0][j]
+								+ "</input></div>";
+					}
+				}
+				data += "</form>";
+
+				 var selector = $('#altViewer-modal');
+				 $(selector).find('.modal-body').html(data);
+				 $(selector).modal('show'); 
+				
+		}
 	} );
 
 </script>
+
+

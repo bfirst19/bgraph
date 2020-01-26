@@ -11,42 +11,65 @@
 	rel="stylesheet" id="bootstrap-css">
 <script src="../js/bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
 <script src="../js/jquery-3.4.1.min.js"></script>
-<link href="../csss/bg-admin.css" rel="stylesheet">
+<link href="../css/bg-admin.css" rel="stylesheet">
 
-
+<link rel="stylesheet" media="screen, print"
+	href="../css/vendors.bundle.css">
+<link rel="stylesheet" media="screen, print"
+	href="../css/theme-demo.css">
 </head>
-<body>
+
 <?php
-if(isset($_GET['code'])) $acode = $_GET['code'];
-else die("No code!");
+session_start();
+require ('../config/db.php');
 
-$con=mysqli_connect("xxx","xxx","xxx","xxx");
-// Check connection
-if (mysqli_connect_errno()) {
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-} else {
-    $acode = mysqli_real_escape_string($con, $acode);
-    $query = mysqli_query($con,"select * from login where activation_code='$acode'")
-    or die(mysqli_error($con)); 
-    if(mysqli_num_rows($query) == 0) {
-        echo "Wrong code";
-        die();
-    } elseif (mysqli_num_rows ($query)==1 && isset($_POST['pass'])) {
-        $pass = mysqli_real_escape_string($con, $_POST['pass']);
-        $query3 = mysqli_query($con,"update login set Password='$pass' where activation_code='$acode'")
-        or die(mysqli_error($con)); 
-
-        echo 'Password Changed';
+if(isset($_POST['submit']))
+{
+    $user_id = $_POST['username'];
+    $result = mysqli_query($conn,"SELECT * FROM users where username='" . $_POST['username'] . "'");
+    $row = mysqli_fetch_assoc($result);
+    $fetch_user_id=$row['username'];
+    $email_id=$row['email'];
+    $password=$row['password'];
+    if($user_id==$fetch_user_id) {
+        $to = $email_id;
+        $subject = "Password";
+        $txt = "Your password is : $password.";
+        $headers = "From: mrpselv@gmail.com" . "\r\n" ;            
+        mail($to,$subject,$txt,$headers);
+        
+        header("Location: ../access/login.php");
+    }
+    else{
+        echo 'invalid userid';
     }
 }
-
 ?>
 
-    enter code here
-    <form action="resetpass.php?code=<?php echo $_GET['code'];?>" method="POST">
-    <p>New Password:</p><input type="password" name="pass" />
-    <input type="submit"  name="submit" value="Signup!" />
-    </form>
-    
-    </body>
+<body>
+	<div class="cotainer" style="margin-top: 10vh;">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-header" style="font-size: 1.5rem;">Forgot password</div>
+					<div class="card-body">
+						<form>
+							<div class="form-group">
+								<label class="form-label" for="username">User id</label> <input
+									type="text" id="username" name="username" class="form-control">
+							</div>
+
+							<div class="form-group">
+								<button type="submit" name="sendMail" id="sendMail"
+									class="btn btn-info btn-sm mr-1">Send me password in email</button>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
 </html>

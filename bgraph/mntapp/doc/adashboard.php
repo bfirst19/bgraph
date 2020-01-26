@@ -30,6 +30,9 @@
 
 <?php include 'footer.php'; ?>
 
+
+
+
 <script type="text/javascript">
 
 
@@ -40,18 +43,15 @@ var columnDefs = [{
   }, {
     title: "Id",
     name:"id",
-    type: "readonly"    
+    readonly:true,
+    type:"hidden"       
   }, {
-    title: "Task Name",
-    name:"name",
+    title: "Station Name",
+    name:"stname",
     type:"text"    
-  }, {
-	    title: "Assigned to",
-	    name:"assigned_to",
-	    type: "readonly"
-  },
+  }, 
    {
-    title: "Maintenance On",
+    title: "Task Date",
     name:"start_date",
     type: "readonly"
   }, {
@@ -62,9 +62,31 @@ var columnDefs = [{
 	    title: "Remarks",
 	    name:"comments",
 	    type: "readonly"
-  }  
+  } ,{
+	    title: "Location",
+	    name:"location",
+	    "mRender": function(data, type, full) {		  
+		    var link = "https://www.google.com/maps?q=" + full[6]+","+full[7];
+	        return '<button class="btn btn-success btn-sm mr-1" onClick="openMap('+full[6]+','+full[7] +');"><span class="icon">Map</span></button>';	        
+	      }
+  	} ,{
+  		
+  	},
+   {
+	    title: "Station ID",
+	    name:"station_id",
+	    type: "readonly"
+  },{
+	    title: "Task Name",
+	    name:"task_name",
+	    type: "readonly"
+}
   ];
 
+function openMap(lat,lon){
+	var link = "https://www.google.com/maps?q=" + lat+","+lon;
+	window.open(link);	
+}
 $(document).ready( function() {
 	
 	var table = $('#mytasks_table_id').DataTable({				  
@@ -83,7 +105,15 @@ $(document).ready( function() {
            orderable: false,
            className: 'select-checkbox',
            targets:   0
-       } ],
+       } ,{
+           orderable: false,
+           targets:   1,
+           visible:false
+       },{
+           orderable: false,
+           targets:   7,
+           visible:false
+       }],
        select: {
            style:    'os',
            selector: 'td:first-child'
@@ -97,7 +127,17 @@ $(document).ready( function() {
       	        	 e.preventDefault();
       	        	var row = dt.rows( { selected: true } ).data();        	        	
       	        	//return '<a class="btn btn-info btn-sm dt-view" href=./complete?id=' + row[0][1] + '>' + 'View' + '</a>';
-      	        	window.location = './adcomp?id=' + row[0][1];
+      	        	//window.location = './adcomp?id=' + row[0][1];
+      	        	
+      	        	var status = row[0][4];
+    	        	
+    	        	if(status==='Open'){
+    	        		window.location = './complete?id=' + row[0][1];
+    	        	}else{
+    	        		window.location = './adcomp?id=' + row[0][1];
+    	        	}
+    	        	
+      	        	
       	        }
       	    },{
     	        text: "<span><i class='fal fa-sync mr-1'>Refresh</i></span>",

@@ -68,11 +68,18 @@ $(document).ready( function() {
               selector: 'td:first-child'
           },
           order: [[ 1, 'asc' ]],
-          buttons: [          
+          buttons: [        	         
           {
               extend: 'selected', 
-              text: "<i class='fas fa-minus-circle'>Delete</i>",
+              text: "<i class=' fas fa-minus-circle'>Delete</i>",
+              className: 'btn buttons-selected btn-danger btn-sm mr-1',
               name: 'delete'      
+          },{
+              text: "<i class='fa fa-edit'>Edit</i>",
+              className: 'btn btn-primary btn-sm mr-1',
+              action: function ( e, dt, node, config ) {
+                  editTemplate(e, dt, node, config);
+              }
           }//,"copy","excel","pdf","print"
           ],
           
@@ -80,7 +87,7 @@ $(document).ready( function() {
 
         	  swal({
         		  title: "Are you sure?",
-        		  text: "Are you sure want to delete the Organization?",
+        		  text: "Are you sure want to delete the template?",
         		  icon: "warning",
         		  buttons: true,
         		  dangerMode: true,
@@ -106,6 +113,12 @@ $(document).ready( function() {
 		    
 		});
 
+
+	 function editTemplate(e, dt, node, config){			
+			var row = dt.rows( { selected: true } ).data();			
+			window.open('./editTemplate?tempId='+row[0][1]);		
+	}
+	 
 	 $('#checklist_table_id tbody').on( 'click', 'a', function () {
 	        var data = table.row( $(this).parents('tr') ).data();	       
 	        $(this).attr('target','_self');

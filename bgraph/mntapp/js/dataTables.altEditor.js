@@ -368,7 +368,7 @@
 
 									// TODO
 									// we should use createDialog()before
-									
+
 									// var data = this.createDialog(columnDefs,
 									// 'Delete Record', 'Delete', 'Close',
 									// 'deleteRowBtn');

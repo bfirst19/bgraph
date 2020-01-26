@@ -25,12 +25,26 @@ while ($row = mysqli_fetch_array($result)) {  // preparing an array
     $nestedData = array();
     $nestedData[] = [];
   
+    $st_id = $row["stations_id"];
+    $status = $row['status'];
+    $task_name = $row['name'];
+    $main_time = $row['start_date'];
+    
+    $query_st = "select * from stations where station_id ='$st_id'";
+    $result_st = mysqli_query($con, $query_st) or die(mysqli_error($con));
+    $row_st = mysqli_fetch_assoc($result_st);
+    
+    
     $nestedData[]= $row["id"];
-    $nestedData[]= $row["name"];
-    $nestedData[]= $row["assigned_to"];//$start,
-    $nestedData[]= $row["start_date"];
-    $nestedData[]= $row["status"];
+    $nestedData[]= $row_st["name"];
+    $nestedData[]= $main_time;
+    $nestedData[]=$status;
     $nestedData[]= $row["comments"];
+    $nestedData[]= $row_st["lat"];
+    $nestedData[]= $row_st["lon"];
+    $nestedData[]= $st_id;
+    $nestedData[]= $task_name;
+    //$nestedData[]= "https://www.google.com/maps?q="+$row_st["lon"];
     //$nestedData[]= $row["create_date"];
     //$nestedData[]= $row["created_by"];       
     $nestedData[] = [];

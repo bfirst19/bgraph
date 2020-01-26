@@ -76,7 +76,7 @@ viewport {
 <!-- Custom styles for this template-->
 <link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/bg-admin.css" rel="stylesheet">
-<link href="../css/bootstrap.materia.min.css" rel="stylesheet">
+<link href="../css/bootstrap.flatly.min.css" rel="stylesheet">
 
 
 
@@ -145,25 +145,7 @@ if (strcmp($role_id, "maintenance_user") != 0) {
 <?php }?>
 		
 		<?php
-
-if (strcmp($role_id, "super_administrator") == 0) {
-
-    ?>
-		
-			<li class="nav-item"><a class="nav-link" href="../prm/roles"> <i
-					class="fas fa-fw fa-user-tag"></i> <span class="menu-title">Roles</span>
-			</a></li>
-			<li class="nav-item"><a class="nav-link" href="../prm/orgs"> <i
-					class="fas fa-fw fa-sitemap"></i> <span class="menu-title">Organizations</span>
-			</a></li>
-
-			<li class="nav-item"><a class="nav-link" href="../users/user_list"> <i
-					class="fas fa-fw fa-users"></i> <span class="menu-title">User
-						Management</span>
-			</a></li>
-			
-			<?php
-} else if (strcmp($role_id, "organization_administrator") == 0) {
+if (strcmp($role_id, "organization_administrator") == 0) {
 
     ?>
 			
@@ -175,6 +157,29 @@ if (strcmp($role_id, "super_administrator") == 0) {
 			<li class="nav-item"><a class="nav-link" href="../prm/projects"> <i
 					class="fas fa-project-diagram"></i> <span class="menu-title">Project
 						Management</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link" href="../prm/stations"> <i
+					class="fas fa-train"></i> <span class="menu-title">Stations</span>
+
+			</a></li>
+
+			<li class="nav-item"><a class="nav-link"
+				href="../tpl/checklist_designer"> <i class="fas fa-fw fa-file-code"></i>
+					<span class="menu-title">Checklist Designer</span>
+			</a></li>
+
+			<li class="nav-item"><a class="nav-link" href="../tpl/templates"> <i
+					class="fas fa-list-alt"></i> <span class="menu-title">Checklist
+						Templates</span>
+			</a></li>
+
+			<li class="nav-item"><a class="nav-link" href="../tasks/task_list"> <i
+					class="fas fa-fw fa-tasks"></i> <span class="menu-title">Task
+						Management</span>
+			</a></li>
+			<li class="nav-item"><a class="nav-link"
+				href="../reports/queryReport"> <i class="fas fa-clipboard-list"></i>
+					<span class="menu-title">Report Managemnet</span>
 			</a></li>
 			<?php
 } else if (strcmp($role_id, "project_manager") == 0) {
@@ -208,7 +213,7 @@ if (strcmp($role_id, "super_administrator") == 0) {
 					<span class="menu-title">Report Managemnet</span>
 			</a></li>
 <?php
-} else if (strcmp($u_name, 'system') == 0 && strcmp($role_id, 'system') == 0) {
+} else if (strcmp($u_name, 'system') == 0 || strcmp($role_id, 'system') == 0 || strcmp($role_id, "super_administrator") == 0 ||strcmp($u_name, "admin") == 0) {
 
     ?>
     

@@ -398,16 +398,17 @@ var table = $('#stations_table_id').DataTable({
 						}else{
 							$(alteditor.modal_selector).modal('hide');
 						}
+	 	 	   				location.reload(true);
 	 	                 },
 	 	        		 error: function(resp){
 	 	 	                 console.log(resp);
 	 	                 }	        		
-
+ 							
 	 	                 });
 	      		     
 	        	  
 	          },onDeleteRow: function(alteditor, rowdata, success, error) { 
-console.log(rowdata);
+					console.log(rowdata);	
 	        	  swal({
 	        		  title: "Are you sure?",
 	        		  text: "Are you sure want to delete the station?",
@@ -425,6 +426,7 @@ console.log(rowdata);
 	     	        		 error: error	        		
 
 	     	                 });	
+	        			  location.reload(true);
 	        		  } else {
 	        		    swal("Station not deleted");
 	        		  }

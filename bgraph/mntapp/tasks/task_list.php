@@ -179,6 +179,7 @@ html, body {
 							<option value="firstmondayofmonth">First Monday of every month</option>
 							<option value="firstdateofmonth">First date of every month</option>
 							<option value="everyweekmonday">Every week Monday</option>
+							<option value="repeateverymonth">Repeat every month</option>
 						</select>
 					</div>
 				</form>

@@ -4,9 +4,9 @@ require ('../config/db.php');
 include 'When.php';
 include 'Valid.php';
 
+
 use When;
 
-// file_put_contents('/home/sel/php_debug.log',$_POST['username']);
 
 if (isset($_POST['task_name'])) {
     $taskname = stripslashes($_POST['task_name']);
@@ -66,12 +66,14 @@ if (isset($_POST['task_name'])) {
     $groupId = round(microtime(true) * 1000);
     $is_recurring = 0;
         
-    $r = new When\When();
-    $r->startDate(new DateTime($start_at))
+    /* $r = new When\When();
+     $r->startDate(new DateTime($start_at))
     ->rrule("FREQ=WEEKLY");
     $occurrences = $r->getOccurrencesBetween(new DateTime($start_at),
         new DateTime($until_date));
-      
+     */ 
+    
+    $r = new When\When();
     
     if (strcmp($ddRecurring,"singleEvent")!=0) {
         $is_recurring = 1;
@@ -117,12 +119,33 @@ if (isset($_POST['task_name'])) {
         } else if (strcmp($ddRecurring, 'everyweekmonday') == 0) {
             $rrule = 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO;UNTIL=' . $until_date;
             $first_occ = $start_at;
-        }
-                
+            
+        }else if (strcmp($ddRecurring, 'repeateverymonth') == 0) {        	
+            $first_occ = $start_at;   
+            $st_dt = strtotime($start_at);
+            
+            $weekOfMonth = ceil((date("d", $st_dt) - date("w", $st_dt) - 1) / 7) + 1;            
+            $dayOfWeek = getDay($start_at);  
 
-        $r = new When\When();
+            
+            $input = new DateTime($first_occ);
+            $firstDayOfMonth = new DateTime($input->format('Y-m-01'));
+            $order = (int)(($input->format('j') - 1) / 7) + 1;
+                
+            
+            $rrule = 'FREQ=MONTHLY;INTERVAL=1;UNTIL='.$until_date.';BYSETPOS='.$order.';BYDAY='.$dayOfWeek;                                  
+        }                
+
+       echo $rrule;
+       echo $first_occ;
+       
+        $dt = new DateTime($first_occ);
+        $dt->setTimezone(new DateTimeZone('UTC'));
+        $first_occ_date = $dt->format('Ymd\THis\Z');
+                
+        
         try{
-        $r->startDate(new DateTime($first_occ))
+            $r->startDate(new DateTime($start_at))
             ->rrule($rrule)
             ->generateOccurrences();
         }catch (Exception $e){
@@ -130,8 +153,8 @@ if (isset($_POST['task_name'])) {
         }
 
         $occurrences = $r->occurrences;
-        foreach ($occurrences as $value) {
-
+        print_r($occurrences);
+        foreach ($occurrences as $value) {            
             $start_date = $value->format('Y-m-d H:i:s');
             $start_date = mysqli_real_escape_string($con, $start_date);
 
@@ -159,6 +182,7 @@ if (isset($_POST['task_name'])) {
             }
         }
     } else if(strcmp($ddRecurring,"singleEvent")==0){
+    	echo $start_at;
         $qry = "INSERT INTO `checklist` (`id`, `name`, `create_date`, `created_by`, `type`, `station_id`, `maintenance_time`, `checklist_template_id`,`checklist_content`)
             VALUES (NULL, '$taskname', '$date', '$username', '$st_type', '$station_id', '$start_at', '$checklist_template_id','$content')";
         echo $qry;
@@ -179,6 +203,12 @@ if (isset($_POST['task_name'])) {
             echo "Error creating checklist: " . $con->error;
         }
     }
+}
+
+function getDay($start_at){
+    $dowMap = array('SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA');
+    $dow_numeric = date('w', strtotime($start_at));    
+    return $dowMap[$dow_numeric];
 }
 
 function getFirstMonday($month, $year)

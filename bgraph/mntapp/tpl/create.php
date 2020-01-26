@@ -14,8 +14,12 @@ if (isset($_POST['template_name'])){
     $created_by  = stripslashes($_SESSION['username']);
     $created_by = mysqli_real_escape_string($con,$created_by);
     
+    
+    $stationType = stripslashes($_POST['stationType']);
+    $stationType = mysqli_real_escape_string($con,$stationType);
+    
     $create_date = date("Y-m-d H:i:s");
-    $qry = "INSERT INTO `checklist_template` (`id`, `template_name`,  `template_content`, `created_by`, `create_date`, `station_type_id`) VALUES (NULL, '$name', '$jsondata','$created_by', '$create_date','58')";
+    $qry = "INSERT INTO `checklist_template` (`id`, `template_name`,  `template_content`, `created_by`, `create_date`, `station_type_id`) VALUES (NULL, '$name', '$jsondata','$created_by', '$create_date','$stationType')";
     //echo $jsondata;
     //$result = mysqli_query($con,$query);
     if($con->query($qry) === TRUE) {

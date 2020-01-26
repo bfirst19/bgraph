@@ -50,10 +50,18 @@ if (isset($_POST['1'])){
     
     $create_date = date("Y-m-d H:i:s");
     
-    $qry = "UPDATE `users` SET `username` = '$username', `email` = '$email',
- `password` = '".md5($password)."', `create_date` ='$create_date', `first_name` = '$firstname', 
-`last_name` = '$lastname', `is_active` = '', `organizations_id` = '$user_org',`projects_id`='$project_id', 
-`roles_id` = '$user_role' WHERE `id` = '$euser_id'";
+    if(isset($password)){
+    	$qry = "UPDATE `users` SET `username` = '$username', `email` = '$email',
+ 		`password` = '".md5($password)."', `create_date` ='$create_date', `first_name` = '$firstname', 
+		`last_name` = '$lastname', `is_active` = '', `organizations_id` = '$user_org',`projects_id`='$project_id', 
+			`roles_id` = '$user_role' WHERE `id` = '$euser_id'";
+    }else{
+    	$qry = "UPDATE `users` SET `username` = '$username', `email` = '$email', `create_date` ='$create_date', `first_name` = '$firstname', 
+    	`last_name` = '$lastname', `is_active` = '', `organizations_id` = '$user_org',`projects_id`='$project_id', 
+		`roles_id` = '$user_role' WHERE `id` = '$euser_id'";
+    }
+    
+    
     
     //$result = mysqli_query($con,$query);
     if($con->query($qry) === TRUE) {
