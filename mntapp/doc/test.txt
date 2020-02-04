@@ -1,0 +1,243 @@
+function html() {
+
+    	 /* var doc2Html    = $("#container1").html();
+    	var doc = new jsPDF();          
+    	var elementHandler = {
+    	 /* '#ignorePDF': function (element, renderer) {
+    	    return true;
+    	  }*/
+    	};
+    	
+    	/*doc.fromHTML(
+    		doc2Html,
+    	    15,
+    	    15,
+    	    {
+    	      'width': 600,'elementHandlers': elementHandler,
+    	    });
+    	 
+    		var pdf = doc.output('blob');*/
+
+     
+    		
+    		
+    		//var blob_url = URL.createObjectURL(pdf);
+    		//console.log(blob_url);
+          /*  var data = new FormData();
+            data.append("data" , doc);console.log(doc);
+            var xhr = new XMLHttpRequest();
+            xhr.open( 'post', './savepdf', true ); //Post to php Script to save to server
+            xhr.send(data);*/
+           /*var fdata = new FormData();
+            fdata.append('file', pdf,'test2.pdf');
+            
+            $.ajax({
+                type: 'POST',
+                url: './savepdf',
+                data: fdata,
+                cache: false,
+                contentType: false,
+                processData: false
+            }).done(function(res) {
+                console.log(res);
+            })
+           
+    */
+    
+        var doc = new jsPDF('p', 'pt');
+        //var res = doc.autoTableHtmlToJson(table, true);
+        //doc.autoTable(res.columns, res.data);
+        var pdf =doc.output(); //returns raw body of resulting PDF returned as a string as per the plugin documentation.
+        var data = new FormData();
+        data.append("data" , pdf);
+        var xhr = new XMLHttpRequest();
+        xhr.open( 'post', './savepdf', true ); //Post to php Script to save to server
+        xhr.send(data);
+
+    }
+    //html();
+});
+
+
+function printDivv(divName) {
+    var printContents = $("#container1").html();
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}
+
+
+function printElem(divId) {
+    var content = document.getElementById(divId).innerHTML;
+    var mywindow = window.open('', 'Print', 'height=600,width=800');
+
+    mywindow.document.write('<html><head><title>Print</title>');
+    mywindow.document.write('</head><body >');
+    mywindow.document.write(content);
+    mywindow.document.write('</body></html>');
+
+    mywindow.document.close();
+    mywindow.focus()
+    mywindow.print();
+    mywindow.close();
+    return true;
+}
+
+function printo(){
+    /*try{
+      var oIframe = document.getElementById('ifrmPrint');
+      var oContent = $("#container1").html();
+      var oDoc = (oIframe.contentWindow || oIframe.contentDocument);
+      if (oDoc.document) oDoc = oDoc.document;
+      oDoc.write('<head><title>title</title>');
+      oDoc.write('</head><body onload="this.focus(); this.print();">');
+      oDoc.write(oContent + '</body>');
+      oDoc.close();
+    } catch(e){
+      self.print();
+    }*/
+	//printElem('container1');
+
+	html2canvas(document.querySelector("#container1")).then(canvas => {
+        //$("#previewBeforeDownload").html(canvas);
+        var imgData = canvas.toDataURL("image/jpeg",1);
+        var pdf = new jsPDF("p", "mm", "a4");
+        var pageWidth = pdf.internal.pageSize.getWidth();
+        var pageHeight = pdf.internal.pageSize.getHeight();
+        var imageWidth = canvas.width;
+        var imageHeight = canvas.height;
+
+        var ratio = imageWidth/imageHeight >= pageWidth/pageHeight ? pageWidth/imageWidth : pageHeight/imageHeight;
+        //pdf = new jsPDF(this.state.orientation, undefined, format);
+        pdf.addImage(imgData, 'JPEG', 0, 0, imageWidth * ratio, imageHeight * ratio);
+        pdf.save("invoice.pdf");
+        //$("#previewBeforeDownload").hide();
+       
+    });
+    
+  }
+  
+
+function ClickHereToPrint(){
+	var doc2Html    = $("#container1").html();
+	var doc = new jsPDF();          
+	var elementHandler = {
+	 /* '#ignorePDF': function (element, renderer) {
+	    return true;
+	  }*/
+	};
+	
+	doc.fromHTML(
+		doc2Html,
+	    15,
+	    15,
+	    {
+	      'width': 180,'elementHandlers': elementHandler
+	    });
+	 
+	doc.output("dataurlnewwindow");
+	
+}
+
+function Export2Doc(element, filename = ''){
+   /* var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+    var postHtml = "</body></html>";
+    var html = preHtml+document.getElementById(element).innerHTML+postHtml;
+
+    var blob = new Blob(['\ufeff', html], {
+        type: 'application/msword'
+    });
+    
+    // Specify link url
+    var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+    
+    // Specify file name
+    filename = filename?filename+'.doc':'document.doc';
+    
+    // Create download link element
+    var downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob ){
+        navigator.msSaveOrOpenBlob(blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = url;
+        
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+    
+    document.body.removeChild(downloadLink);*/
+   
+	/* $(document).googoose({
+		filename: 'home/sel/test.docx',
+        download: 1,
+        area: '#container1'
+   });
+  */
+	
+	//$("#container1").wordExport("CanvasJS");
+
+	var doc2Html    = $("#container1").html();
+	var doc = new jsPDF();          
+	var elementHandler = {
+	 /* '#ignorePDF': function (element, renderer) {
+	    return true;
+	  }*/
+	};
+	
+	doc.fromHTML(
+		doc2Html,
+	    15,
+	    15,
+	    {
+	      'width': 180,'elementHandlers': elementHandler
+	    });
+	 
+	doc.output("blob");
+	  
+}
+
+
+
+
+
+
+//
+
+
+	var doc2Html    = $("#container1").html();
+	
+	html2canvas(doc2Html).then(canvas => {
+        //$("#previewBeforeDownload").html(canvas);
+        var imgData = canvas.toDataURL("image/jpeg",1);
+        var doc = new jsPDF("l", "pt", "letter");
+        doc.addImage(img, 'JPEG',20,20);
+        var file = doc.output('blob');
+        var fd = new FormData();     // To carry on your data  
+        fd.append('mypdf',file);
+
+        $.ajax({
+        	url: './savepdf',   //here is also a problem, depends on your 
+           data: fd,           //backend language, it may looks like '/model/send.php'
+           dataType: 'text',
+           processData: false,
+           contentType: false,
+           type: 'POST',
+           success: function (response) {
+             alter('Exit to send request');
+           },
+           error: function (jqXHR) {
+             alter('Failure to send request');
+           }
+        });
+	});
